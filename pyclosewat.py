@@ -107,7 +107,7 @@ def outrec(prec: PDBRecord, fp) -> None:
     fp.write(line + "\n")
 
 def cpypdb(pin: PDBRecord, pou: PDBRecord) -> None:
-    """Copies the PDBRecord pin into pou"""
+    """Copies the PDBRecord pin into pou (deep copy)"""
     pou.p_rtype = pin.p_rtype
     pou.p_attype = pin.p_attype
     pou.p_resname = pin.p_resname
@@ -133,6 +133,14 @@ def cpypdb(pin: PDBRecord, pou: PDBRecord) -> None:
     pou.p_resnum = pin.p_resnum
     pou.p_resno = pin.p_resno
     pou.p_nbr = pin.p_nbr
+
+def swap01(pw0: PDBRecord, pw1: PDBRecord) -> None:
+    """Swap the contents of records pw0 and pw1"""
+    # Create temporary record
+    temp = PDBRecord()
+    cpypdb(pw0, temp)
+    cpypdb(pw1, pw0)
+    cpypdb(temp, pw1)
 
 def pdbdist(p0: PDBRecord, p1: PDBRecord) -> float:
     """Calculates the distance squared between two atoms"""
@@ -432,11 +440,201 @@ def ismetal(atstr: str) -> int:
               "HG", "CE", "PR", "ND", "PM", "SM", "EU", "GD", "TB", "DY", "HO", "ER",
               "TM", "YB", "LU", "TH", "PA", "U", "NP", "PU"]
     
-    atstr = atstr.strip()
-    for metal in metals:
-        if atstr == metal:
-            return 1
+    atstr = atstr.strip().upper()
+    # Check first two characters
+    if len(atstr) >= 2 and atstr[:2] in metals:
+        return 1
+    # Check first character only
+    if len(atstr) >= 1 and atstr[0] in metals:
+        return 1
     return 0
+
+def seeneighbor(pwap: PDBRecord, pwaq: PDBRecord, dsq: float, top: TotalSt) -> int:
+    """Returns a code value describing the relationship between
+    the water record pwap and the neighbor record pwaq.
+    Code values:
+    0: pwap and pwaq are distant from one another
+    1: pwap and pwaq are already independent of one another
+    2: pwaq is a metal and therefore it's okay to be close
+    3: pwap and pwaq are independent in the input but not in the proposed output
+    4: pwap and pwaq will become independent if the conformer code for pwap is altered
+    5: pwap needs to be made a non-blank conformer and its occupancy must be 0.5 or lower
+    6: pwap is just barely too close to pwaq and must be edited
+    7: pwap is considerably too close to pwaq and must be manually edited
+    """
+    diag = 0
+    
+    if ismetal(pwaq.p_atomid):
+        diag = 2
+    elif pwaq.p_conf == ' ':
+        is_hydrogen = len(pwaq.p_attype) > 0 and (pwaq.p_attype[0] == 'H' or (len(pwaq.p_attype) > 1 and pwaq.p_attype[1] == 'H'))
+        if is_hydrogen:
+            diag = 7 if dsq < top.tminhsq - HBARELY else 6
+        else:
+            diag = 7 if dsq < top.tminhbsq - OBARELY else 6
+    elif pwap.p_conf == ' ':
+        if pwap.p_confo != ' ' and pwap.p_confo != pwaq.p_confo:
+            diag = 3
+        else:
+            diag = 5
+    elif pwap.p_conf != pwaq.p_confo:
+        if pwap.p_confo == ' ':
+            diag = 4
+        elif pwap.p_confo != pwaq.p_conf:
+            diag = 1
+        else:
+            diag = 4
+    else:
+        diag = 1
+    
+    pwap.p_diag = diag
+    return diag
+
+def closetitle(top: TotalSt) -> None:
+    """Prints a suitable header atop the list of waters near other atoms"""
+    if top.tfpl is None:
+        return
+    
+    top.tfpl.write(f" Water molecules within {math.sqrt(top.tminhbsq):7.2f} A of neighbors (or {math.sqrt(top.tminhsq):7.2f} A of H's)\n")
+    top.tfpl.write("    Coordinates of Water Distance")
+    top.tfpl.write(" Renumbered   Original   Nearest Neighbor Atom\n")
+    top.tfpl.write("       x       y       z               ")
+    top.tfpl.write("Water      Water  AtomID Renumbered   Original Diagnosis\n")
+
+def printclose(pwap: PDBRecord, pwaq: PDBRecord, dsq: float, fp) -> None:
+    """Print close contact information"""
+    if fp is None:
+        return
+    
+    fp.write(f" {pwap.p_xc:7.3f} {pwap.p_yc:7.3f} {pwap.p_zc:7.3f} {math.sqrt(dsq):8.3f}")
+    fp.write(f" {pwap.p_conf}{pwap.p_resname:<3} {pwap.p_chainid}{pwap.p_resnum:4d} ")
+    fp.write(f"{pwap.p_confo}{pwap.p_resname:<3} {pwap.p_chaino}{pwap.p_resno:4d} ")
+    fp.write(f"   {pwaq.p_attype:<4} {pwaq.p_conf}{pwaq.p_resname:<3} {pwaq.p_chainid}{pwaq.p_resnum:4d} ")
+    fp.write(f"{pwaq.p_confo}{pwaq.p_resname:<3} {pwaq.p_chaino}{pwaq.p_resno:4d}")
+    
+    if 0 < pwap.p_diag <= 7:
+        fp.write(f" {DIAGSTR[pwap.p_diag]:>7}\n")
+    else:
+        fp.write("\n")
+
+def confchange(pwp: PDBRecord, top: TotalSt) -> str:
+    """Change conformer designation for a water molecule"""
+    if pwp.p_conf == 'A':
+        # Find the water list index for pwp
+        pwp_idx = -1
+        for i in range(len(top.tpwa)):
+            if top.tpwa[i] is pwp:
+                pwp_idx = i
+                break
+        
+        if pwp_idx == -1 or pwp_idx >= top.tpwap - 1:
+            pwp.p_conf = 'B'
+            pwp.p_diag = 4
+            return 'B'
+        
+        oth = top.tpwa[pwp_idx + 1]
+        if oth.p_conf != 'B' or oth.p_resnum != pwp.p_resnum:
+            pwp.p_conf = 'B'
+            pwp.p_diag = 4
+        else:
+            swap01(pwp, oth)
+            pwp.p_conf = 'A'
+            oth.p_conf = 'B'
+            pwp.p_diag = oth.p_diag = 4
+        
+        return pwp.p_conf
+    
+    elif pwp.p_conf == 'B':
+        # Find the water list index for pwp
+        pwp_idx = -1
+        for i in range(len(top.tpwa)):
+            if top.tpwa[i] is pwp:
+                pwp_idx = i
+                break
+        
+        if pwp_idx == -1 or pwp_idx <= 0:
+            pwp.p_conf = 'A'
+            pwp.p_diag = 4
+            return pwp.p_conf
+        
+        oth = top.tpwa[pwp_idx - 1]
+        if oth.p_conf != 'A' or oth.p_resnum != pwp.p_resnum:
+            pwp.p_conf = 'A'
+            pwp.p_diag = 4
+            return pwp.p_conf
+        else:
+            swap01(pwp, oth)
+            pwp.p_conf = 'B'
+            oth.p_conf = 'A'
+            pwp.p_diag = oth.p_diag = 4
+        
+        return pwp.p_conf
+    
+    return '\0'
+
+def diagclose(pwap: PDBRecord, pwaq: PDBRecord, dsq: float, top: TotalSt) -> None:
+    """Diagnoses a close contact between water pwap and other record pwaq"""
+    # Check if it's a hydrogen - need to be closer
+    is_hydrogen = len(pwaq.p_attype) > 0 and (pwaq.p_attype[0] == 'H' or (len(pwaq.p_attype) > 1 and pwaq.p_attype[1] == 'H'))
+    if is_hydrogen:
+        if dsq >= top.tminhsq:
+            return
+    
+    # If it's already okay, don't count it as an error
+    diagnosis = seeneighbor(pwap, pwaq, dsq, top)
+    if diagnosis < 2:
+        return
+    
+    # If the user wants the software to do the bump, we do it here
+    if diagnosis == 6 and top.tbump > 0:
+        is_h = len(pwaq.p_attype) > 0 and (pwaq.p_attype[0] == 'H' or (len(pwaq.p_attype) > 1 and pwaq.p_attype[1] == 'H'))
+        if is_h:
+            alpha = 1.0 / math.sqrt(dsq / top.tminhsq)
+        else:
+            alpha = 1.0 / math.sqrt(dsq / top.tminhbsq)
+        
+        # Nudge alpha slightly higher so ending distance is a tiny bit farther
+        alpha *= 1.004
+        alphap = 1.0 - alpha
+        pwap.p_xc = pwap.p_xc * alpha + pwaq.p_xc * alphap
+        pwap.p_yc = pwap.p_yc * alpha + pwaq.p_yc * alphap
+        pwap.p_zc = pwap.p_zc * alpha + pwaq.p_zc * alphap
+        return
+    
+    # Resolve situations where pwaq has a nonblank conformer
+    if pwaq.p_conf != ' ':
+        if pwap.p_conf == ' ':
+            # If pwap.p_conf is blank, make it either A or B
+            pwap.p_conf = 'B' if pwaq.p_conf == 'A' else 'A'
+            if pwap.p_occ > 0.5:
+                pwap.p_occ = 0.5
+            return
+        # If pwap is already nonblank and happens to be a different conformer from pwaq
+        elif pwap.p_conf != pwaq.p_conf:
+            return
+        # Otherwise we have to get clever
+        else:
+            avail = confchange(pwap, top)
+            if avail != '\0':
+                pwap.p_conf = avail
+            else:
+                avail = confchange(pwaq, top)
+                if avail != '\0':
+                    pwaq.p_conf = avail
+                else:
+                    if top.tfpl:
+                        top.tfpl.write(f"Warning: unresolved conformers for {pwap.p_conf}{pwap.p_resname} {pwap.p_chainid}{pwap.p_resnum:4d}\n")
+                    printclose(pwap, pwaq, dsq, top.tfpl)
+    
+    if top.tnclose == 0:
+        closetitle(top)
+    
+    printclose(pwap, pwaq, dsq, top.tfpl)
+    
+    if 0 < pwap.p_diag <= 7:
+        top.talert[pwap.p_diag] += 1
+    
+    top.tnclose += 1
 
 def noconformers(top: TotalSt) -> int:
     """Get rid of input AHOH, BHOH, etc.
@@ -718,7 +916,7 @@ def adjustqb(top: TotalSt, p0: PDBRecord) -> None:
     avg_occ = total_occ / nrecs
     
     # Adjust B values and occupancies
-    scale_factor = 0.9
+    scale_factor = 0.90
     for i, p in enumerate(records):
         # Set conformer ID based on position
         p.p_conf = chr(ord('A') + i)
@@ -991,38 +1189,99 @@ def sortmults(top: TotalSt) -> None:
 
 def proximity(top: TotalSt) -> None:
     """For all waters, identify close contacts"""
-    # Check each water against all protein atoms
-    for pwap in top.tpwa[:top.tpwap]: # Iterate over active waters
+    if top.tfpl:
+        top.tfpl.write(f" {top.tpwap:6d} waters, {top.tpatp:6d} non-waters\n")
+    print(f" {top.tpwap:6d} waters, {top.tpatp:6d} non-waters")
+    
+    # Look for waters that have four conformations (A,B,C,D)
+    # In some cases we can create two conformations of two each
+    for i in range(top.tpwap):
+        pwap = top.tpwa[i]
+        if pwap.p_conf == 'D':
+            split4(pwap, top)
+    
+    # For each water, check close contacts with non-waters and other waters
+    top.tnclose = 0
+    for i in range(top.tpwap):
+        pwap = top.tpwa[i]
         
-        # Skip waters that are already marked for special handling
-        if pwap.p_diag != 0:
-            continue
+        # Check against all non-water atoms
+        for j in range(top.tpatp):
+            pat = top.tpat[j]
+            dsq = pdbdist(pwap, pat)
+            if dsq < top.tminhbsq:
+                diagclose(pwap, pat, dsq, top)
         
-        # Check against all protein atoms
-        for pat in top.tpat[:top.tpatp]: # Iterate over active protein atoms
-            
-            # Calculate distance
-            dist = pdbdist(pwap, pat)
-            
-            # Check for close contacts
-            if dist < top.tminhsq:
-                # Too close to a hydrogen - mark for attention
-                pwap.p_diag = 6  # Bump
-                top.talert[6] += 1
-                
-                if top.tfpl is not None:
-                    top.tfpl.write(f"Water {pwap.p_chainid}{pwap.p_resnum} too close to {pat.p_chainid}{pat.p_resnum} {pat.p_attype}: {math.sqrt(dist):.2f} Å\n")
-                
-                break
-            elif dist < top.tminhet and ismetal(pat.p_attype):
-                # Close to a metal - mark as metal-coordinated
-                pwap.p_diag = 2  # Metal
-                top.talert[2] += 1
-                
-                if top.tfpl is not None:
-                    top.tfpl.write(f"Water {pwap.p_chainid}{pwap.p_resnum} coordinated to metal {pat.p_chainid}{pat.p_resnum} {pat.p_attype}: {math.sqrt(dist):.2f} Å\n")
-                
-                break
+        # For water proximities, only look at waters earlier in the list
+        # to avoid double-counting
+        for j in range(i):
+            pat = top.tpwa[j]
+            if pwap.p_resnum != pat.p_resnum:
+                dsq = pdbdist(pwap, pat)
+                if dsq < top.tminhbsq:
+                    diagclose(pwap, pat, dsq, top)
+    
+    # Print summary of close contacts
+    if top.tfpl:
+        top.tfpl.write(f" {top.tnclose:6d} close {'contact' if top.tnclose == 1 else 'contacts'} noted")
+    print(f" {top.tnclose:6d} close {'contact' if top.tnclose == 1 else 'contacts'} noted", end='')
+    
+    # Report breakdown by diagnostic category
+    i0 = -1
+    for i in range(8):
+        if top.talert[i] > 0:
+            if i0 == -1:
+                i0 = i
+            msg = f"{',' if i != i0 else ':'} {top.talert[i]:3d} {DIAGSTR[i]}"
+            if top.tfpl:
+                top.tfpl.write(msg)
+            print(msg, end='')
+    
+    if top.tfpl:
+        top.tfpl.write("\n")
+    print()
+    
+    # Check for waters that are far from all neighbors
+    top.tnclose = 0
+    for i in range(top.tpwap):
+        pwap = top.tpwa[i]
+        closestsq = 1.0e9
+        pclose = None
+        
+        # Find closest non-carbon/non-hydrogen atom
+        for j in range(top.tpatp):
+            pat = top.tpat[j]
+            # Skip if p_attype is empty or if it's carbon/hydrogen
+            if len(pat.p_attype) == 0:
+                continue
+            if (pat.p_attype[0] != 'C' and pat.p_attype[0] != 'H' and
+                (len(pat.p_attype) < 2 or (pat.p_attype[1] != 'C' and pat.p_attype[1] != 'H'))):
+                dsq = pdbdist(pwap, pat)
+                if dsq < closestsq:
+                    closestsq = dsq
+                    pclose = pat
+        
+        # Find closest other water
+        for j in range(top.tpwap):
+            if i != j:
+                pat = top.tpwa[j]
+                dsq = pdbdist(pwap, pat)
+                if dsq < closestsq:
+                    closestsq = dsq
+                    pclose = pat
+        
+        # If closest neighbor is too far, report it
+        if pclose is not None and closestsq > top.tminhet:
+            if top.tnclose == 0 and top.tfpl:
+                top.tfpl.write(f"Waters that are more than {math.sqrt(top.tminhet):8.2f} A from the nearest heteroatom neighbor:\n")
+            pwap.p_diag = 0
+            if top.tfpl:
+                printclose(pwap, pclose, closestsq, top.tfpl)
+            top.tnclose += 1
+    
+    if top.tfpl:
+        top.tfpl.write(f" {top.tnclose:6d} {'water is' if top.tnclose == 1 else 'waters are'} too far from all neighbors\n")
+    print(f" {top.tnclose:6d} {'water is' if top.tnclose == 1 else 'waters are'} too far from all neighbors")
 
 def insert_singles(top: TotalSt) -> None:
     """Move single-conformation but conformation-marked waters into the empty zone
@@ -1153,13 +1412,15 @@ def relateem(top: TotalSt, pwap: PDBRecord, thisp: PDBRecord) -> None:
             occ1 = 0.75
         occ0 = 1.0 - occ1
     
-    wt = abs(b00 - b01) / (b00 + b01)
+    wt = abs(b00 - b01) / (b00 + b01) if (b00 + b01) > 0 else 0.0
     if wt < 0.07:
         bscal = 0.8
     else:
         bscal = 0.9 if wt < 0.3 else 0.96
     
-    b0 = bscal * (b00 if b00 < b01 else b01)
+    # Calculate scaled b-factor from the smaller one (or use a default if both are zero)
+    min_b = min(b00, b01) if (b00 > 0 or b01 > 0) else 20.0  # Default b-factor
+    b0 = bscal * min_b
     
     pwap.p_nconfs = thisp.p_nconfs = 2
     pwap.p_occ = occ0

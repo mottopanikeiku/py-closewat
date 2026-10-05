@@ -44,6 +44,7 @@ htmlcov/
 # Output files
 *.log
 closewat.log
+!results/reference/**/*.log
 *_output.pdb
 test_output*.pdb
 processed_*.pdb

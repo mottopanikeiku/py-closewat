@@ -1,0 +1,57 @@
+Run of closewat
+  ATOM records    HETATM records     Total        # of
+ non-water water non-water water non-water water Chains
+       492     0         5    62       497    62      1
+A 121 @ 23.222   0.583   2.563 Hbond  2.80 A to A 136 @ 24.539  -1.132   4.346
+A 122 @ 24.172  -3.669  -7.292 Hbond  2.79 A to A 124 @ 22.592  -2.942  -9.476
+A 123 @ 25.603   3.078  -0.657 Hbond  2.80 A to A 126 @ 25.609   0.603   0.644
+A 124 @ 22.592  -2.942  -9.476 Hbond  2.79 A to A 122 @ 24.172  -3.669  -7.292
+A 125 @ 20.325  -5.937   2.301 Hbond  2.64 A to A 171 @ 22.415  -6.949   1.045
+A 126 @ 25.609   0.603   0.644 Hbond  2.80 A to A 123 @ 25.603   3.078  -0.657
+A 130 @ 17.758  -7.382   2.637 Hbond  2.96 A to A 125 @ 20.325  -5.937   2.301
+A 132 @ 17.343  -0.548   6.647 Hbond  2.66 A to A 147 @ 16.685   1.893   7.486
+A 134 @ 20.500  18.535  -7.668 Hbond  3.07 A to A 165 @ 17.940  19.374  -6.193
+A 136 @ 24.539  -1.132   4.346 Hbond  2.80 A to A 121 @ 23.222   0.583   2.563
+A 141 @ 28.101   8.041  -4.774 Hbond  3.10 A to A 159 @ 29.738   5.542  -3.944
+A 143 @ 13.390  12.355  -2.301 Hbond  2.65 A to A 179 @ 12.100  12.100   0.000
+A 145 @ 14.249  -6.328 -12.106 Hbond  3.06 A to A 153 @ 13.767  -7.041 -15.047
+A 147 @ 16.685   1.893   7.486 Hbond  2.66 A to A 132 @ 17.343  -0.548   6.647
+A 148 @ 18.837   3.535   8.394 Hbond  2.86 A to A 147 @ 16.685   1.893   7.486
+A 150 @  6.100   6.887   1.430 clash  2.30 A to A 160 @  7.702   7.702   0.000
+A 151 @ 23.739  -5.237   0.079 clash  2.37 A to A 171 @ 22.415  -6.949   1.045
+A 152 @ 17.400   2.091 -19.838 clash  2.39 A to A 168 @ 18.700   2.530 -17.886
+A 153 @ 13.767  -7.041 -15.047 Hbond  3.06 A to A 145 @ 14.249  -6.328 -12.106
+A 154 @ 26.072  18.430 -12.604 Hbond  2.76 A to A 169 @ 27.616  18.538 -14.885
+A 159 @ 29.738   5.542  -3.944 Hbond  3.10 A to A 141 @ 28.101   8.041  -4.774
+A 150 @  7.702   7.702   0.000 clash  2.30 A to A 150 @  6.100   6.887   1.430
+A 165 @ 17.940  19.374  -6.193 Hbond  3.07 A to A 134 @ 20.500  18.535  -7.668
+A 152 @ 18.700   2.530 -17.886 clash  2.39 A to A 152 @ 17.400   2.091 -19.838
+A 169 @ 27.616  18.538 -14.885 Hbond  2.76 A to A 154 @ 26.072  18.430 -12.604
+A 151 @ 22.415  -6.949   1.045 clash  2.37 A to A 151 @ 23.739  -5.237   0.079
+A 178 @ 22.714  -3.445   5.585 Hbond  3.20 A to A 136 @ 24.539  -1.132   4.346
+A 179 @ 12.100  12.100   0.000 Hbond  2.65 A to A 143 @ 13.390  12.355  -2.301
+ Mean B value for waters:   31.820
+  Duo:  A 257:    6.100    6.887    1.430  0.75  28.71 (was A150 )
+                  7.702    7.702    0.000  0.25  28.71 (was A160 )
+  Duo:  A 258:   23.739   -5.237    0.079  0.58  28.86 (was A151 )
+                 22.415   -6.949    1.045  0.42  28.86 (was A171 )
+  Duo:  A 259:   17.400    2.091  -19.838  0.56  29.74 (was A152 )
+                 18.700    2.530  -17.886  0.44  29.74 (was A168 )
+Multiple-conformation waters:     3 pairs,     0 triples,     0 quads
+     62 waters,    492 non-waters
+ Water molecules within    2.50 A of neighbors (or    1.50 A of H's)
+    Coordinates of Water Distance Renumbered   Original   Nearest Neighbor Atom
+       x       y       z               Water      Water  AtomID Renumbered   Original Diagnosis
+  12.341  -3.582  -4.910    1.944  HOH A 211  HOH A 131     O3   SO4 A   1  SO4 A   1    edit
+   7.786  -3.942  -6.462    2.425  HOH A 229  HOH A 149     O    ALA A  90  ALA A  90    edit
+  13.614  15.891 -13.982    2.331  HOH A 248  HOH A 174     OD1  ASP A  55  ASP A  55    edit
+   5.081  -1.895   3.145    2.476  HOH A 249  HOH A 175     OD2  ASP A  85  ASP A  85    bump
+  18.583   7.240 -19.012    2.226  HOH A 254  HOH A 181     O    VAL A 119  VAL A 119    edit
+      5 close contacts noted:   1    bump,   4    edit
+Waters that are more than     3.90 A from the nearest heteroatom neighbor:
+  23.220  -5.511   9.235    4.225  HOH A 235  HOH A 158     O    HOH A 252  HOH A 178
+  10.403   2.416 -14.365    3.992  HOH A 245  HOH A 170     NZ   LYS A  59  LYS A  59
+   6.739  -8.014   7.617    6.249  HOH A 255  HOH A 182     NZ   LYS A  84  LYS A  84
+      3 waters are too far from all neighbors
+    62 total waters:    56 unconformed, lone conformers:  0 A,  0 B,  0 C,  0 D
+    3 pairs,     0 triples,     0 quads

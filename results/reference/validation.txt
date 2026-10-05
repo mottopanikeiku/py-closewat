@@ -1,0 +1,23 @@
+Environment observed during this comparison:
+Linux x86_64; CPython 3.13.15; GCC 16.2.1; pytest 9.1.1.
+Local CPU, no GPU, no paid compute.
+
+Command:
+nice -n 19 gcc -std=c99 -O0 closewat.c -lm -o /tmp/py-closewat-reference
+Result: exit 0, no compiler output.
+
+Command:
+nice -n 19 .venv/bin/python tools/compare_reference.py --output results/reference
+Result: exit 0.
+1IR0: C=129, Python=129; field mismatches={'bfactor': 2, 'resnum': 129}; same order=False
+1UBQ: C=58, Python=58; field mismatches={'bfactor': 4, 'occupancy': 2, 'resnum': 58}; same order=False
+1CTF: C=62, Python=62; field mismatches={'bfactor': 2, 'occupancy': 4, 'resnum': 62}; same order=False
+2CI2: C=64, Python=64; field mismatches={'bfactor': 8, 'occupancy': 6, 'resnum': 64}; same order=False
+
+Command:
+nice -n 19 .venv/bin/python -m pytest -q test_reference.py test_pyclosewat.py test_integration.py
+Result: exit 0; 50 passed in 0.58s (5 new reference tests and 45 existing tests).
+An unused import in test_reference.py was removed after this run; no functional code changed.
+
+Not run: batch CSV fetching, plotting scripts, coverage, nondefault CLI options,
+other compiler/platform builds, or diagnostic-code parity comparisons.

@@ -1,272 +1,48 @@
 # py-closewat
 
-[![Python Version](https://img.shields.io/badge/python-3.7%2B-blue.svg)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)](#testing)
+A Python port of the bundled [original `closewat.c`](closewat.c) for analyzing water molecules in X-ray PDB structures; the C source does not name its author or license.
 
-A Python toolkit to analyze water molecules in X-ray diffraction PDB structures. This is a complete and improved reimplementation of the original C `closewat` algorithm with enhanced features, comprehensive testing, and better error handling.
+Does the Python port reproduce the original C program's water assignments and occupancy/B-factor adjustments?
 
-## Table of Contents
+[`pyclosewat.py`](pyclosewat.py) reads PDB atom records, groups nearby waters, assigns chains and conformers, and writes water-only PDB records plus a contact log. [`test_reference.py`](test_reference.py) compiles the unchanged C source with GCC and runs both command-line programs on pinned structures. [`tools/compare_reference.py`](tools/compare_reference.py) saves their outputs and reports differences by original atom serial.
 
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Testing](#testing)
-- [Algorithm Details](#algorithm-details)
-- [Repository Structure](#repository-structure)
-- [Development](#development)
-- [License](#license)
+## Result
 
-## Features
+**The port is not equivalent to the C program on these small examples.** With default options, both preserve the same water coordinates and atom serials, but every output residue number differs. Ordering, some occupancies, and some B-factors also differ.
 
-### Core Water Analysis
-- Identify and classify water molecules in protein structures
-- Detect water conformers (alternate positions for the same water site)
-- Analyze close contacts between waters and protein atoms
-- Detect metal coordination (water molecules coordinating metal ions)
-- Calculate hydrogen bonding networks between waters
-- Renumber and reorganize waters by chain and occupancy
+| PDB | Waters, each program | Different residue numbers | Different occupancies | Different B-factors |
+|---|---:|---:|---:|---:|
+| 1IR0 | 129 | 129 | 0 | 2 |
+| 1UBQ | 58 | 58 | 2 | 4 |
+| 1CTF | 62 | 62 | 4 | 2 |
+| 2CI2 | 64 | 64 | 6 | 8 |
 
-### Complete Implementation
-- All core functions from C version implemented
-- Missing functions added: `seeneighbor`, `diagclose`, `confchange`, `swap01`, `printclose`, `closetitle`
-- Complete proximity analysis with diagnostic codes
-- Proper conformer handling (A/B/C/D alternate positions)
-- Metal coordination detection
-- Comprehensive error handling and validation
+Counts are per water record, from [`results/reference/comparison.json`](results/reference/comparison.json). Full C/Python PDB outputs and logs are in [`results/reference/`](results/reference/). The tests check complete saved outputs and the explicit disagreements; passing them does **not** mean the two algorithms agree.
 
-### Testing and Quality
-- 45+ unit and integration tests covering all functions
-- Edge case and error handling tests
-- Distance calculation validation
-- Output format verification
+The existing [`pdb_water_analysis.csv`](pdb_water_analysis.csv) has 844 rows of structure metadata and water counts. It is not a C-versus-Python validation dataset, and its download workflow was not rerun here.
 
-## Installation
+## Reproduce
 
-### Prerequisites
-
-- Python 3.7+
-- pip
-
-### Install Dependencies
+From the repository root, with Python, [uv](https://docs.astral.sh/uv/), and GCC installed:
 
 ```bash
-pip install -r requirements.txt
+uv venv .venv && uv pip install --python .venv/bin/python pytest
+nice -n 19 .venv/bin/python -m pytest -q test_reference.py test_pyclosewat.py test_integration.py
+nice -n 19 .venv/bin/python tools/compare_reference.py --output /tmp/closewat-comparison
 ```
 
-## Usage
+Local CPU only; no GPU or paid service. Test inputs are bundled, so tests need no network access. Only environment setup downloads packages. The analysis CLI uses the Python standard library; batch plotting scripts need the optional packages in [`requirements.txt`](requirements.txt). For single-file usage, see [QUICKSTART.md](QUICKSTART.md).
 
-### Analyze a Single PDB File
+## Limitations
 
-```bash
-python pyclosewat.py input.pdb output.pdb
-```
+- Default options on these small X-ray structures are the reference scope; other structures and option combinations are not validated against C.
+- Numbering and occupancy/B-factor disagreements remain unresolved. Do not substitute this port for the C program without checking the output.
+- Logs and diagnostic classifications are recorded, but diagnostic-code equivalence is not established.
+- The C program is a comparison baseline, not experimental ground truth for water placement or hydrogen bonding.
+- Original C authorship and redistribution terms need confirmation; there is no license file in this repository.
 
-This will:
-1. Read the input PDB file
-2. Identify all water molecules
-3. Analyze water-water and water-protein contacts
-4. Detect alternate conformations
-5. Write annotated waters to output PDB
-6. Generate a detailed log file (`closewat.log`)
+## Prior work and data
 
-### Command Line Options
+This project builds on the included [`closewat.c`](closewat.c), not a new water-analysis algorithm. The original author/source URL is not recorded in the file or its initial repository commit. Structures come from the [RCSB PDB](https://www.rcsb.org/): [1IR0](https://www.rcsb.org/structure/1IR0), [1UBQ](https://www.rcsb.org/structure/1UBQ), [1CTF](https://www.rcsb.org/structure/1CTF), and [2CI2](https://www.rcsb.org/structure/2CI2). PDB depositor credits remain in the input headers; the format is documented by [wwPDB](https://www.wwpdb.org/documentation/file-format).
 
-```bash
-python pyclosewat.py [options] <input.pdb> <output.pdb>
-```
-
-**Options:**
-- `-S` : Single chain mode - assign all waters to chain 'S'
-- `-H` : High B-factor quality mode - adjust occupancies for high B-value waters
-- `-B` : Automatic bump correction - move waters to resolve close contacts
-- `-X <dist>` : Maximum H-bond distance (default: 3.2 A)
-- `-M <dist>` : Minimum H-bond distance (default: 2.5 A)
-- `-L <dist>` : Minimum hydrogen distance (default: 1.5 A)
-- `-O <dist>` : Minimum heteroatom distance (default: 3.9 A)
-
-**Examples:**
-
-```bash
-# Basic analysis
-python pyclosewat.py 1abc.pdb 1abc_waters.pdb
-
-# Single chain mode with tighter distance threshold
-python pyclosewat.py -S -M 2.3 input.pdb output.pdb
-
-# Automatic bump correction with high B quality mode
-python pyclosewat.py -B -H input.pdb output.pdb
-```
-
-### Python API
-
-```python
-import pyclosewat as pc
-
-# Create structures
-top = pc.TotalSt()
-water = pc.PDBRecord()
-
-# Parse PDB line
-line = "HETATM  100  O   HOH A 200      10.00  20.00  30.00  1.00 25.00           O"
-pc.strtorec(line, water)
-
-# Calculate distance between two atoms
-dist_squared = pc.pdbdist(water1, water2)
-
-# Check if atom is metal
-is_metal = pc.ismetal("MG")  # Returns 1
-
-# Detect water residues
-is_water = pc.is_water_residue("HOH")  # Returns True
-```
-
-## Testing
-
-Run the comprehensive test suite:
-
-```bash
-# Install testing dependencies
-pip install pytest pytest-cov
-
-# Run all tests
-pytest
-
-# Run with verbose output
-pytest -v
-
-# Run with coverage report
-pytest --cov=pyclosewat --cov-report=html
-```
-
-### Test Coverage
-
-- **Unit Tests** (`test_pyclosewat.py`): Tests for all classes and functions
-- **Integration Tests** (`test_integration.py`): End-to-end workflow tests
-- **Test Fixtures** (`test_fixtures.py`): Sample PDB structures for testing
-
-## Algorithm Details
-
-### Water Analysis Pipeline
-
-1. **First Pass - Counting**: Count ATOM/HETATM records, identify waters and chains
-2. **Second Pass - Processing**: Parse all atom and water records
-3. **Conformer Cleanup**: Remove input conformer designations, adjust occupancies
-4. **Water Network Analysis**: Find nearest-neighbor waters, identify H-bonding networks
-5. **Conformer Assignment**: Assign A/B/C/D conformer labels with proper occupancies
-6. **Chain Assignment**: Assign waters to nearest protein chains
-7. **Proximity Analysis**: Check all water-protein contacts, detect issues
-8. **Sorting and Output**: Sort waters, write annotated PDB and log
-
-### Diagnostic Codes
-
-Waters are assigned codes based on their environment:
-
-| Code | Label | Description |
-|------|-------|-------------|
-| 0 | faraway | Too far from all neighbors (> 3.9 A) |
-| 1 | ok now | Properly positioned |
-| 2 | metal | Coordinating a metal ion (acceptable) |
-| 3 | leave | Independent from original input |
-| 4 | altconf | Conformer code altered |
-| 5 | replace | Needs conformer assignment |
-| 6 | bump | Too close, can be auto-corrected |
-| 7 | edit | Too close, needs manual editing |
-
-## Repository Structure
-
-```
-py-closewat/
-├── closewat.c                 # Original C implementation (reference)
-├── pyclosewat.py              # Complete Python implementation
-├── test_pyclosewat.py         # Unit tests
-├── test_integration.py        # Integration tests
-├── test_fixtures.py           # Test data and fixtures
-├── run_tests.py               # Simple test runner
-├── analyze_pdb_files.py       # Batch PDB analysis
-├── analyze_water_distribution.py  # Statistical analysis
-├── requirements.txt           # Python dependencies
-├── README.md                  # This file
-├── CHANGELOG.md               # Version history
-└── QUICKSTART.md              # Quick start guide
-```
-
-## Development
-
-### Contributing
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Make your changes with proper tests
-4. Run the test suite: `pytest`
-5. Commit your changes: `git commit -m 'Add amazing feature'`
-6. Push to the branch: `git push origin feature/amazing-feature`
-7. Open a Pull Request
-
-### Coding Standards
-
-- Follow PEP 8 style guidelines
-- Add type hints to new functions
-- Write docstrings for all public functions
-- Include tests for new functionality
-
-## Improvements Over C Version
-
-### Accessibility
-- Clean Python syntax vs C pointer arithmetic
-- Comprehensive documentation with examples
-- Type hints for better IDE support
-- Interactive Python API for scripting
-
-### Robustness
-- 45+ unit tests covering all functions
-- Input validation at all entry points
-- Comprehensive error messages with context
-- Edge case handling (empty files, malformed lines, etc.)
-
-### Features
-- Extended water residue detection (HOH, WAT, H2O, TIP3, etc.)
-- Improved metal detection with comprehensive list
-- Statistical analysis tools for batch processing
-- Log file with detailed diagnostic information
-
-## Troubleshooting
-
-**Problem**: `ModuleNotFoundError: No module named 'pyclosewat'`
-```bash
-# Ensure you're in the correct directory
-cd py-closewat
-python pyclosewat.py input.pdb output.pdb
-```
-
-**Problem**: No waters in output
-```bash
-# Check input file has water molecules
-grep "HETATM" input.pdb | grep "HOH"
-```
-
-## License
-
-This project is licensed under the MIT License.
-
-## Citation
-
-If you use py-closewat in your research, please cite:
-
-```bibtex
-@software{pyclosewat2024,
-  title = {py-closewat: A Python toolkit for analyzing water molecules in PDB structures},
-  year = {2024},
-  publisher = {GitHub},
-  url = {https://github.com/mottopanikeiku/py-closewat}
-}
-```
-
-## References
-
-- PDB file format: https://www.wwpdb.org/documentation/file-format
-- Original closewat algorithm
-
----
-
-**Status**: Production Ready
+[Reference notes](docs/REFERENCE.md) describe the comparison, input provenance, and the next parity work.

@@ -17,6 +17,6 @@ To view the available flags:
 python pyclosewat.py --help
 ```
 
-`-S` requests a single water chain, `-H` requests high-B occupancy adjustment, and `-B` enables bump handling. `-X`, `-M`, `-L`, and `-O` set distance thresholds. The reference comparison currently covers default options only, not these flags. Do not treat automatic adjustments as validated structural refinement.
+`-S` requests a single water chain, `-H` requests high-B occupancy adjustment, and `-B` enables bump handling. `-X`, `-M`, `-L`, and `-O` set distance thresholds. The measured before/after reference comparison covers default options; two additional `-S` regressions cover 1UBQ and 1CTF, not general flag parity. Do not treat automatic adjustments as validated structural refinement.
 
 The [README](README.md#reproduce) gives the offline test and reference-comparison commands. The original integration tests exercise portions of the Python pipeline; `test_reference.py` runs the complete C and Python CLIs and checks their saved outputs, including documented disagreements.

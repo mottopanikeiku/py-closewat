@@ -32,6 +32,8 @@ The old `adjustmult()` only renumbered records and never called `adjustqb()`. It
 
 The eight remaining 1IR0 numbering differences form four tied pairs: 671/678 (B=6.72), 653/702 (11.29), 732/739 (14.44), and 690/733 (15.80), each with identical occupancy and no conformer. C's `occbsort()` returns +1 in both comparison directions for equal Q/B. That is not a consistent ordering relation; this run's C sort reverses each pair relative to Python. I did not invent a tie-breaker and call it portable C behavior. Non-equivalence remains explicit.
 
+Independent review found two numbering regressions, which I corrected: reinsertion now tracks each chain's own single-water range even if that chain has no multiple conformers, and `-S` preserves its start-at-one numbering base. Tests cover mixed single/multiple chain ranges with a newly marked singleton, plus complete `-S` comparisons on 1UBQ and 1CTF. Those two flag cases do not establish general option parity.
+
 ## Reproduce
 
 `tools/compare_reference.py` compiles the bundled, unchanged C with `gcc -std=c99 -O0 closewat.c -lm`. Each complete CLI runs in its own temporary directory with default options and a subprocess timeout. Full PDB outputs, stdout, stderr, and logs are retained in [before](../results/parity/before/) and [after](../results/parity/after/). The earlier [reference results](../results/reference/) remain unchanged.

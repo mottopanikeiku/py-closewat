@@ -70,3 +70,33 @@ def test_adjustqb_matches_c(originals, adjustment_oracle):
         assert water.p_bval == pytest.approx(float(b), rel=1e-6, abs=1e-7)
         assert f"{water.p_occ:.2f}" == f"{float(q):.2f}"
         assert f"{water.p_bval:.2f}" == f"{float(b):.2f}"
+
+
+@pytest.mark.parametrize("mark_first_single", (False, True))
+def test_reinsertion_keeps_single_water_ranges_within_their_chain(mark_first_single):
+    top = pc.TotalSt()
+    for chain_id, base in (("A", 101), ("B", 301)):
+        chain = pc.Chain()
+        chain.c_chainid, chain.c_minwat = chain_id, base
+        top.tchs.append(chain)
+    specifications = [
+        (1, "A", 101, " ", 1), (2, "A", 102, " ", 1),
+        (3, "B", 301, " ", 1), (4, "B", 302, "A", 2),
+        (5, "B", 302, "B", 2),
+    ]
+    for serial, chain, number, conformer, count in specifications:
+        water = pc.PDBRecord()
+        water.p_atnum, water.p_chainid, water.p_resnum = serial, chain, number
+        water.p_conf, water.p_nconfs = conformer, count
+        water.p_bval = 10.0
+        top.tpwa.append(water)
+    top.tpwap = len(top.tpwa)
+    pc.sortmults(top)
+    # Contact diagnostics may mark a singleton after chain ranges were found.
+    if mark_first_single:
+        top.tpwa[0].p_conf = "A"
+    pc.insert_singles(top)
+    assert [(w.p_chainid, w.p_resnum) for w in top.tpwa] == [
+        ("A", 101), ("A", 102), ("B", 301), ("B", 312), ("B", 312),
+    ]
+    assert [w.p_atnum for w in top.tpwa[:2]] == ([2, 1] if mark_first_single else [1, 2])

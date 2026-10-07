@@ -6,6 +6,7 @@
 - I restored chain numbering above the largest non-water residue, grouped conformer numbering, the multiple-conformer numbering gap, and C's adjustment based on original occupancy and B-factor.
 - Parsed water-record parity rose from 0/313 to 305/313 across the bundled structures; three of four outputs match as ordered parsed records. Eight equal-key numbering differences in 1IR0 remain. Byte formatting and diagnostic equivalence are not claimed.
 - I kept the old comparison files, added before/after outputs and direct C adjustment tests, and added CI for the offline tests. C authorship and license remain open.
+- I fixed two issues found in independent review: chain-local reinsertion ranges cannot span another chain, and `-S` retains its numbering base after reinsertion. Regression tests cover mixed single/multiple chain ranges and two `-S` inputs; this is not general flag parity.
 
 ## C reference comparison and documentation correction
 

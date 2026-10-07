@@ -1,50 +1,51 @@
 # C/Python reference comparison
 
-## Method
+## Result and scope
 
-`tools/compare_reference.py` compiles the bundled, unchanged `closewat.c` using `gcc -std=c99 -O0 closewat.c -lm`. Each CLI runs with default options in its own temporary directory, with a 60-second subprocess timeout. No PDB conversion, coordinate trimming, or filtering is applied to the inputs.
+I compared complete default CLI outputs on the four bundled X-ray structures before and after fixing the port. A water matches only if every parsed PDB field agrees after alignment by original atom serial. I score output order and byte equality separately; neither can be inferred from matching counts.
 
-The comparison aligns output waters by original atom serial, checks parsed PDB fields, records output ordering separately, and checks byte equality. `results/reference/comparison.json` includes every differing field, the input SHA-256 digests, missing/extra serials, and counts. Full PDB outputs, stdout, stderr, and logs are kept alongside it. The temporary executable path is replaced with `closewat` in the saved C log heading; output PDB files are unmodified.
+| Input | Waters | Matching records before | Matching records after | Remaining number / occupancy / B differences |
+|---|---:|---:|---:|---|
+| 1IR0 | 129 | 0 | 121 | 8 / 0 / 0 |
+| 1UBQ | 58 | 0 | 58 | 0 / 0 / 0 |
+| 1CTF | 62 | 0 | 62 | 0 / 0 / 0 |
+| 2CI2 | 64 | 0 | 64 | 0 / 0 / 0 |
 
-`test_reference.py` compiles and executes C again, checks both full output files against the saved outputs, and checks the observed comparison against the explicit difference report. It also asserts that the original water atom serials and coordinates survive in both implementations. A small mutation test checks that changing occupancy or reversing record order is detected. Missing GCC or a failed C process is a test failure, not a skip.
+The [summary](../results/parity/summary.json) records 0/313 → 305/313 (97.44%) matching waters and 0/4 → 3/4 ordered parsed outputs. There are no missing or extra serials. All 12 occupancy and 16 B-factor disagreements are removed. Byte equality is still 0/4: Python left-aligns the stripped atom name where C right-aligns it. Logs and diagnostic classifications are not equivalent by this test.
 
-These are disagreement regression tests, **not an assertion of algorithm parity**. Changes that improve parity should update the affected expected output and report only after reviewing the new C comparison; do not blindly regenerate expected files to make a failure disappear.
+## Isolated causes
 
-## Observations
+Before changing the algorithm, I extracted [four real pairs](../tests/data/reproducers/). Each contains two original water records, the nearest non-water atom to the predominant conformer, and an atom preserving the maximum residue number of that chain. [sources.json](../tests/data/reproducers/sources.json) identifies the input and serials. No coordinates, occupancies, or B-factors were edited.
 
-The recorded run used CPython 3.13.15, GCC 16.2.1, and pytest 9.1.1 on Linux x86_64. `nice -n 19 .venv/bin/python -m pytest -q test_reference.py test_pyclosewat.py test_integration.py` passed all 50 tests (the 5 new reference tests and 45 existing tests). Commands and observed results are saved in [`validation.txt`](../results/reference/validation.txt). Batch analysis, coverage, nondefault options, and other compiler/platform builds were not run.
+The [before](../results/parity/reproducers/before/comparison.json) and [after](../results/parity/reproducers/after/comparison.json) comparisons show the same Q/B differences in these small inputs and their removal after the fix:
 
-| Input | C waters | Python waters | Residue-number mismatches | Occupancy mismatches | B-factor mismatches |
-|---|---:|---:|---:|---:|---:|
-| 1IR0 | 129 | 129 | 129 | 0 | 2 |
-| 1UBQ | 58 | 58 | 58 | 2 | 4 |
-| 1CTF | 62 | 62 | 62 | 4 | 2 |
-| 2CI2 | 64 | 64 | 64 | 6 | 8 |
+- 1IR0: serials 693/753 isolated the B-factor difference (C 9.54, Python 8.35).
+- 1UBQ: serials 641/649 isolated occupancy 0.35/0.65 versus 0.34/0.66 and B 25.44 versus 20.90.
+- 1CTF: serials 524/544 isolated occupancy 0.57/0.43 versus 0.58/0.42.
+- 2CI2: serials 527/541 isolated occupancy 0.37/0.63 versus 0.32/0.68 and B 12.76 versus 10.61.
 
-Source: `results/reference/comparison.json`. Every case has a different serial ordering. None is byte-equal or equal as an ordered list of parsed records. There are no missing/extra serials. Chain, conformer labels, atom identity, and coordinates match after alignment on these inputs; this does not establish behavior on other inputs. Logs have different layouts, and diagnostic-code equivalence was not tested.
+The numbering implementation started every chain at 1, numbered paired conformers independently, and did not apply C's multiple-conformer ordering or 10-residue gap. I now retain the largest non-water residue per chain, start at the next hundred plus one, assign a group using its predominant conformer, and reorder/renumber multiple conformers as C does.
 
-Examples of substantive disagreements:
+The old `adjustmult()` only renumbered records and never called `adjustqb()`. Its unused adjustment routine averaged already-modified B-factors and forced equal occupancies. I replaced that with the C equations: use original occupancy and B-factor, floor original B at 2, weight occupancy by inverse B, scale the minimum original B according to occupancy and weighted spread, and correct two-decimal occupancy sums. [test_adjustment.py](../test_adjustment.py) directly invokes the unchanged C routine for pairs, triples, quads, zero occupancy, small B, large B, and rounding cases.
 
-- 1IR0 serials 693 and 753: C emits B=9.54, Python emits B=8.35.
-- 1UBQ serial 641: C emits occupancy=0.35 and B=25.44; Python emits 0.34 and 20.90.
-- 2CI2 serial 527: C emits occupancy=0.37 and B=12.76; Python emits 0.32 and 10.61.
+The eight remaining 1IR0 numbering differences form four tied pairs: 671/678 (B=6.72), 653/702 (11.29), 732/739 (14.44), and 690/733 (15.80), each with identical occupancy and no conformer. C's `occbsort()` returns +1 in both comparison directions for equal Q/B. That is not a consistent ordering relation; this run's C sort reverses each pair relative to Python. I did not invent a tie-breaker and call it portable C behavior. Non-equivalence remains explicit.
 
-The cause of each disagreement has not been isolated. They are not explained away as floating-point tolerance. Existing Python unit tests and partial-pipeline integration tests do not justify substituting Python for C.
+## Reproduce
+
+`tools/compare_reference.py` compiles the bundled, unchanged C with `gcc -std=c99 -O0 closewat.c -lm`. Each complete CLI runs in its own temporary directory with default options and a subprocess timeout. Full PDB outputs, stdout, stderr, and logs are retained in [before](../results/parity/before/) and [after](../results/parity/after/). The earlier [reference results](../results/reference/) remain unchanged.
+
+```bash
+python tools/compare_reference.py --output /tmp/closewat-comparison
+python tools/compare_reference.py --reproducers --output /tmp/closewat-pairs
+python tools/report_parity.py
+```
+
+The summary command reads the committed before/after comparisons. `test_reference.py` runs both CLIs again, checks complete saved outputs and the difference report, and checks preservation of input water serials and positions. Missing GCC or a failed C process is a test failure. Passing these tests asserts the recorded scope, not parity on unseen inputs. No timing, scientific accuracy, nondefault-option, or native refinement claim follows.
 
 ## Inputs and attribution
 
-`1IR0.pdb` was already bundled. The other full PDB files were downloaded from the free RCSB service for this comparison:
+`1IR0.pdb` was already bundled. The full additional inputs came from the free RCSB service: [1UBQ](https://files.rcsb.org/download/1UBQ.pdb), [1CTF](https://files.rcsb.org/download/1CTF.pdb), and [2CI2](https://files.rcsb.org/download/2CI2.pdb). Their headers specify X-ray diffraction and retain depositor/publication credits. Input SHA-256 values are pinned in the reports; tests are offline.
 
-- `tests/data/1UBQ.pdb`: https://files.rcsb.org/download/1UBQ.pdb
-- `tests/data/1CTF.pdb`: https://files.rcsb.org/download/1CTF.pdb
-- `tests/data/2CI2.pdb`: https://files.rcsb.org/download/2CI2.pdb
+The C file has no author/license notice. Its earliest recorded repository commit is `095ded4` (2025-04-25, “All files done”), without upstream attribution. I assign no license or author to it. Identifying its original source and confirming redistribution terms remains open for the owner.
 
-All four headers specify X-ray diffraction. The original headers, depositor names, and publication references remain intact. Input hashes are pinned in the report; tests use these files offline and do not fetch current revisions.
-
-The C file has no author/license notice. Its earliest recorded repository commit is `095ded4` (2025-04-25, “All files done”), with no upstream attribution supplied by the file. No new license is assigned to it here. The owner should identify the original source and confirm redistribution terms.
-
-The existing 844-row CSV is retained unchanged. It has columns `pdb_id`, `resolution`, `rfree`, and `water_count`; it is metadata/count data, not these CLI comparisons. The existing batch download and plotting scripts were not rerun.
-
-## Next step
-
-Use the saved real disagreements to isolate numbering in `makechains()`/`sortmults()` and occupancy/B-factor adjustment in `relateem()`/`adjustqb()` against the corresponding C routines. The next change should add a small isolated reproducer for a real discrepancy before altering the algorithm, then rerun this comparison. Local CPU and no paid compute should be sufficient; no runtime or completion estimate has been measured. Default parity should precede claims about nondefault flags or diagnostic-code parity.
+The existing 844-row metadata/water-count CSV is unchanged and is not the parity dataset. Batch fetching and plotting were not rerun. The next useful compatibility work is an explicit tie policy, then separate tests for nondefault flags and higher-order grouping; I make no claim that those already match.

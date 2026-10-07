@@ -1,5 +1,12 @@
 # Changelog
 
+## Default-output parity fixes
+
+- I isolated saved numbering and occupancy/B-factor disagreements in four small real PDB pairs before changing the port.
+- I restored chain numbering above the largest non-water residue, grouped conformer numbering, the multiple-conformer numbering gap, and C's adjustment based on original occupancy and B-factor.
+- Parsed water-record parity rose from 0/313 to 305/313 across the bundled structures; three of four outputs match as ordered parsed records. Eight equal-key numbering differences in 1IR0 remain. Byte formatting and diagnostic equivalence are not claimed.
+- I kept the old comparison files, added before/after outputs and direct C adjustment tests, and added CI for the offline tests. C authorship and license remain open.
+
 ## C reference comparison and documentation correction
 
 - Added `test_reference.py`, which compiles the unchanged `closewat.c` with GCC and runs both CLIs on 1IR0 and three additional small X-ray structures: 1UBQ, 1CTF, and 2CI2.

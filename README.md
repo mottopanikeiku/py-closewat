@@ -8,16 +8,18 @@ Does the Python port reproduce the original C program's water assignments and oc
 
 ## Result
 
-**The port is not equivalent to the C program on these small examples.** With default options, both preserve the same water coordinates and atom serials, but every output residue number differs. Ordering, some occupancies, and some B-factors also differ.
+**I increased parsed water-record parity from 0/313 to 305/313 (97.44%) on the four bundled structures.** The port is still **not equivalent** to C. Three structures now match every parsed field in output order; eight waters in 1IR0 still have different residue numbers because their occupancy and B-factor sort keys tie.
 
-| PDB | Waters, each program | Different residue numbers | Different occupancies | Different B-factors |
-|---|---:|---:|---:|---:|
-| 1IR0 | 129 | 129 | 0 | 2 |
-| 1UBQ | 58 | 58 | 2 | 4 |
-| 1CTF | 62 | 62 | 4 | 2 |
-| 2CI2 | 64 | 64 | 6 | 8 |
+| PDB | Waters | Matching complete records, before → after | Remaining Q/B differences |
+|---|---:|---:|---:|
+| 1IR0 | 129 | 0 → 121 | 0 |
+| 1UBQ | 58 | 0 → 58 | 0 |
+| 1CTF | 62 | 0 → 62 | 0 |
+| 2CI2 | 64 | 0 → 64 | 0 |
 
-Counts are per water record, from [`results/reference/comparison.json`](results/reference/comparison.json). Full C/Python PDB outputs and logs are in [`results/reference/`](results/reference/). The tests check complete saved outputs and the explicit disagreements; passing them does **not** mean the two algorithms agree.
+I count a match only when **every parsed field** agrees after alignment by original atom serial; output order is scored separately. The [before/after summary](results/parity/summary.json) and [full comparisons](results/parity/) contain the counts, outputs, and logs. Byte equality remains 0/4 because atom-name spacing differs.
+
+I extracted [four small real-data reproducers](tests/data/reproducers/), fixed chain numbering and conformer-group sorting, and ported C's original-occupancy/B-factor weighting. All four pairs now agree on parsed output. [Reference notes](docs/REFERENCE.md) explain the causes and the unresolved ties, rather than treating them as floating-point noise.
 
 The existing [`pdb_water_analysis.csv`](pdb_water_analysis.csv) has 844 rows of structure metadata and water counts. It is not a C-versus-Python validation dataset, and its download workflow was not rerun here.
 
@@ -27,7 +29,7 @@ From the repository root, with Python, [uv](https://docs.astral.sh/uv/), and GCC
 
 ```bash
 uv venv .venv && uv pip install --python .venv/bin/python pytest
-nice -n 19 .venv/bin/python -m pytest -q test_reference.py test_pyclosewat.py test_integration.py
+nice -n 19 .venv/bin/python -m pytest -q test_reference.py test_adjustment.py test_pyclosewat.py test_integration.py
 nice -n 19 .venv/bin/python tools/compare_reference.py --output /tmp/closewat-comparison
 ```
 
@@ -36,7 +38,7 @@ Local CPU only; no GPU or paid service. Test inputs are bundled, so tests need n
 ## Limitations
 
 - Default options on these small X-ray structures are the reference scope; other structures and option combinations are not validated against C.
-- Numbering and occupancy/B-factor disagreements remain unresolved. Do not substitute this port for the C program without checking the output.
+- Equal-key sorting in C does not define a consistent tie order; eight residue-number disagreements remain. Do not substitute Python for C without checking the output.
 - Logs and diagnostic classifications are recorded, but diagnostic-code equivalence is not established.
 - The C program is a comparison baseline, not experimental ground truth for water placement or hydrogen bonding.
 - Original C authorship and redistribution terms need confirmation; there is no license file in this repository.
@@ -45,4 +47,6 @@ Local CPU only; no GPU or paid service. Test inputs are bundled, so tests need n
 
 This project builds on the included [`closewat.c`](closewat.c), not a new water-analysis algorithm. The original author/source URL is not recorded in the file or its initial repository commit. Structures come from the [RCSB PDB](https://www.rcsb.org/): [1IR0](https://www.rcsb.org/structure/1IR0), [1UBQ](https://www.rcsb.org/structure/1UBQ), [1CTF](https://www.rcsb.org/structure/1CTF), and [2CI2](https://www.rcsb.org/structure/2CI2). PDB depositor credits remain in the input headers; the format is documented by [wwPDB](https://www.wwpdb.org/documentation/file-format).
 
-[Reference notes](docs/REFERENCE.md) describe the comparison, input provenance, and the next parity work.
+[Reference notes](docs/REFERENCE.md) describe the comparison, input provenance, and remaining parity limits.
+
+Written with AI coding assistance.

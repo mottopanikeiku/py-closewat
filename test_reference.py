@@ -11,8 +11,9 @@ import sys
 import pytest
 
 from tools.compare_reference import INPUTS, ROOT, compare, compile_reference, records, run_cli
+from tools.compare_reference import REPRODUCERS
 
-RESULTS = ROOT / "results/reference"
+RESULTS = ROOT / "results/parity/after"
 EXPECTED = json.loads((RESULTS / "comparison.json").read_text())["cases"]
 
 
@@ -44,6 +45,18 @@ def test_real_pdb_reference_and_documented_differences(name, c_reference, tmp_pa
     def positions(text_records):
         return sorted((r["serial"], r["x"], r["y"], r["z"]) for r in text_records)
     assert positions(records(c)) == positions(records(python)) == positions(input_waters)
+
+@pytest.mark.parametrize("name", REPRODUCERS)
+def test_extracted_pair_parity(name, c_reference, tmp_path):
+    """Each four-record real-data reproducer now agrees on every parsed field."""
+    c = run_cli([str(c_reference)], REPRODUCERS[name], tmp_path / "c")["output"]
+    python = run_cli([sys.executable, str(ROOT / "pyclosewat.py")],
+                     REPRODUCERS[name], tmp_path / "python")["output"]
+    comparison = compare(c, python)
+    assert comparison["parsed_equal_in_order"]
+    assert comparison["field_mismatches"] == {}
+    assert comparison["c_waters"] == comparison["python_waters"] == 2
+
 
 
 def test_comparison_detects_changed_fields_and_order():

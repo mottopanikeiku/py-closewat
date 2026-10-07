@@ -1,0 +1,10 @@
+  ATOM records    HETATM records     Total        # of
+ non-water water non-water water non-water water Chains
+       492     0         5    62       497    62      1
+ Mean B value for waters:   31.820
+Multiple-conformation waters:     3 pairs,     0 triples,     0 quads
+     62 waters,    492 non-waters
+      5 close contacts noted:   1    bump,   4    edit
+      3 waters are too far from all neighbors
+    62 total waters:    56 unconformed,lone conformers:  0 A,  0 B,  0 C,  0 D
+    3 pairs,     0 triples,     0 quads

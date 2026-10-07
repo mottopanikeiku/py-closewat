@@ -1,0 +1,14 @@
+Run of closewat
+  ATOM records    HETATM records     Total        # of
+ non-water water non-water water non-water water Chains
+         2     0         0     2         2     2      1
+A 151 @ 23.739  -5.237   0.079 clash  2.37 A to A 171 @ 22.415  -6.949   1.045
+ Mean B value for waters:   28.863
+  Duo:  A 201:   23.739   -5.237    0.079  0.58  28.86 (was A151 )
+                 22.415   -6.949    1.045  0.42  28.86 (was A171 )
+Multiple-conformation waters:     1 pairs,     0 triples,     0 quads
+      2 waters,      2 non-waters
+      0 close contacts noted
+      0 waters are too far from all neighbors
+     2 total waters:     0 unconformed, lone conformers:  0 A,  0 B,  0 C,  0 D
+    1 pairs,     0 triples,     0 quads

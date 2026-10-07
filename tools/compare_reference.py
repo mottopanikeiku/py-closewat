@@ -16,6 +16,9 @@ INPUTS = {
     "1CTF": ROOT / "tests/data/1CTF.pdb",
     "2CI2": ROOT / "tests/data/2CI2.pdb",
 }
+REPRODUCERS = {
+    path.stem: path for path in sorted((ROOT / "tests/data/reproducers").glob("*.pdb"))
+}
 
 
 def compile_reference(destination):
@@ -89,6 +92,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True,
                         help="Directory for generated outputs and comparison.json")
+    parser.add_argument("--reproducers", action="store_true",
+                        help="Compare the small extracted disagreement inputs instead")
     args = parser.parse_args()
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=True)
@@ -97,15 +102,17 @@ def main():
         work = Path(temporary)
         executable = work / "closewat"
         compile_reference(executable)
-        for name, input_path in INPUTS.items():
+        for name, input_path in (REPRODUCERS if args.reproducers else INPUTS).items():
             c = run_cli([str(executable)], input_path, work / name / "c")
             python = run_cli([sys.executable, str(ROOT / "pyclosewat.py")], input_path, work / name / "python")
             case_dir = output / name
             case_dir.mkdir(exist_ok=True)
             for label, result in (("c", c), ("python", python)):
                 (case_dir / f"{label}.pdb").write_text(result["output"])
-                # Remove the temporary executable path from the C log heading.
-                (case_dir / f"{label}.log").write_text(result["log"].replace(str(executable), "closewat"))
+                # Normalize executable paths in log headings, not PDB outputs.
+                log = result["log"].replace(str(executable), "closewat")
+                log = log.replace(str(ROOT / "pyclosewat.py"), "pyclosewat.py")
+                (case_dir / f"{label}.log").write_text(log)
                 (case_dir / f"{label}.stderr").write_text(result["stderr"])
                 (case_dir / f"{label}.stdout").write_text(result["stdout"])
             report["cases"][name] = {

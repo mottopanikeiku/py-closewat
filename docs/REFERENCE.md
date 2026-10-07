@@ -1,6 +1,8 @@
 # C/Python reference comparison
 
 ## Result and scope
+I replaced machine-specific executable paths in saved Python log headings with `pyclosewat.py`; the recorded PDB outputs and comparison values are unchanged.
+
 
 I compared complete default CLI outputs on the four bundled X-ray structures before and after fixing the port. A water matches only if every parsed PDB field agrees after alignment by original atom serial. I score output order and byte equality separately; neither can be inferred from matching counts.
 

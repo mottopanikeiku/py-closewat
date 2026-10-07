@@ -1149,19 +1149,19 @@ def sortmults(top: TotalSt) -> None:
     i = 0
     while i < top.tpwap:
         start = i
-        while i < top.tpwap and top.tpwa[i].p_conf == ' ':
-            i += 1
-        if i == top.tpwap:
-            return
-        chain_id = top.tpwa[i].p_chainid
+        chain_id = top.tpwa[start].p_chainid
         chain = next(c for c in top.tchs if c.c_chainid == chain_id)
-        chain.c_wat0 = start
-        chain.c_watl1 = i
-        chain.c_watm0 = i + 1
-        first = i
-        while (i < top.tpwap and top.tpwa[i].p_chainid == chain_id
-               and top.tpwa[i].p_conf != ' '):
+        while i < top.tpwap and top.tpwa[i].p_chainid == chain_id:
             i += 1
+        first = start
+        while first < i and top.tpwa[first].p_conf == ' ':
+            first += 1
+        chain.c_wat0 = start
+        chain.c_watl1 = first
+        chain.c_watm0 = first + 1
+        chain.c_watl = i
+        if first == i:
+            continue
         group = sorted(top.tpwa[first:i], key=cmp_to_key(compare_b))
         number = min(w.p_resnum for w in group)
         previous = group[0].p_resnum
@@ -1172,7 +1172,6 @@ def sortmults(top: TotalSt) -> None:
                 number += 1
             water.p_resnum = number + NUMGAP
         top.tpwa[first:i] = group
-        chain.c_watl = i
 
 
 def proximity(top: TotalSt) -> None:
@@ -1595,6 +1594,7 @@ def main() -> int:
         if len(tos.tchs) == 1 and tos.t1ch_s and tos.tchs[0].c_chainid != 'S':
             # Ensure tnwaters is positive before accessing tpwa[0]
             if tos.tnwaters > 0:
+                tos.tchs[0].c_curwat = tos.tchs[0].c_minwat = 1
                 first_resnum_offset = tos.tpwa[0].p_resnum - 1 
                 for k_idx in range(tos.tnwaters): 
                     tos.tpwa[k_idx].p_chainid = 'S'

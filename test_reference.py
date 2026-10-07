@@ -56,6 +56,16 @@ def test_extracted_pair_parity(name, c_reference, tmp_path):
     assert comparison["parsed_equal_in_order"]
     assert comparison["field_mismatches"] == {}
     assert comparison["c_waters"] == comparison["python_waters"] == 2
+@pytest.mark.parametrize("name", ("1UBQ", "1CTF"))
+def test_single_chain_option_preserves_c_numbering(name, c_reference, tmp_path):
+    c = run_cli([str(c_reference), "-S"], INPUTS[name], tmp_path / "c")["output"]
+    python = run_cli([sys.executable, str(ROOT / "pyclosewat.py"), "-S"],
+                     INPUTS[name], tmp_path / "python")["output"]
+    assert compare(c, python)["parsed_equal_in_order"]
+    assert records(python)[0]["resnum"] == 1
+    assert {water["chain"] for water in records(python)} == {"S"}
+
+
 
 
 

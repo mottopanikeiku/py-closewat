@@ -45,6 +45,7 @@ htmlcov/
 *.log
 closewat.log
 !results/reference/**/*.log
+!results/parity/**/*.log
 *_output.pdb
 test_output*.pdb
 processed_*.pdb

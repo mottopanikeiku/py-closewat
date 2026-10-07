@@ -1,0 +1,41 @@
+Run of closewat
+  ATOM records    HETATM records     Total        # of
+ non-water water non-water water non-water water Chains
+       602     0         0    58       602    58      1
+A  78 @ 19.168  31.868  17.050 Hbond  2.56 A to A  84 @ 19.969  32.720  14.769
+A  84 @ 19.969  32.720  14.769 Hbond  2.56 A to A  78 @ 19.168  31.868  17.050
+A  97 @ 23.629  20.940   3.146 Hbond  2.58 A to A  98 @ 25.928  21.774   2.325
+A  98 @ 25.928  21.774   2.325 Hbond  2.58 A to A  97 @ 23.629  20.940   3.146
+A  99 @ 33.388  21.973   5.659 Hbond  2.88 A to A 116 @ 33.447  21.075   2.918
+A 113 @ 16.035  17.841   8.765 Hbond  2.60 A to A 130 @ 14.882  16.539  10.692
+A 114 @ 35.712  46.814  12.926 clash  2.15 A to A 122 @ 34.405  45.181  13.420
+A 116 @ 33.447  21.075   2.918 Hbond  2.88 A to A  99 @ 33.388  21.973   5.659
+A 121 @ 39.646  23.959   9.699 clash  2.11 A to A 128 @ 41.628  24.537  10.145
+A 122 @ 34.405  45.181  13.420 clash  2.15 A to A 122 @ 35.712  46.814  12.926
+A 128 @ 41.628  24.537  10.145 clash  2.11 A to A 128 @ 39.646  23.959   9.699
+A 130 @ 14.882  16.539  10.692 Hbond  2.60 A to A 113 @ 16.035  17.841   8.765
+ Mean B value for waters:   23.361
+  Duo:  A 155:   41.628   24.537   10.145  0.53  16.42 (was A128 )
+                 39.646   23.959    9.699  0.47  16.42 (was A121 )
+  Duo:  A 156:   34.405   45.181   13.420  0.66  20.90 (was A122 )
+                 35.712   46.814   12.926  0.34  20.90 (was A114 )
+Multiple-conformation waters:     2 pairs,     0 triples,     0 quads
+     58 waters,    602 non-waters
+ Water molecules within    2.50 A of neighbors (or    1.50 A of H's)
+    Coordinates of Water Distance Renumbered   Original   Nearest Neighbor Atom
+       x       y       z               Water      Water  AtomID Renumbered   Original Diagnosis
+  44.612  32.306  16.961    2.469  HOH A 101  HOH A 105     O    GLY A  35  GLY A  35    bump
+  25.928  21.774   2.325    2.496  HOH A 108  HOH A  98     OE1  GLU A  18  GLU A  18    bump
+  28.824  25.094   0.886    2.373  HOH A 135  HOH A 110     N    MET A   1  MET A   1    edit
+      3 close contacts noted:   2    bump,   1    edit
+Waters that are more than     3.90 A from the nearest heteroatom neighbor:
+  42.535  22.385  13.872    4.169  HOH A 124  HOH A  93     O    HOH A 125  HOH A  94
+  42.240  24.744  25.707    3.916  HOH A 127  HOH A  89     OD2  ASP A  39  ASP A  39
+  31.965  38.637   3.699    4.231  HOH A 128  HOH A  82     OG1  THR A  14  THR A  14
+  37.752  30.947   1.059    4.598  HOH A 130  HOH A 126     O    HOH A 150  HOH A 132
+  28.988  22.175  -1.744    3.932  HOH A 144  HOH A 129     O    HOH A 135  HOH A 110
+  37.667  43.421  17.000    4.566  HOH A 148  HOH A 134     OG1  THR A   9  THR A   9
+  38.363  30.369   5.579    3.948  HOH A 150  HOH A 132     O    HOH A 123  HOH A  88
+      7 waters are too far from all neighbors
+    58 total waters:    54 unconformed, lone conformers:  0 A,  0 B,  0 C,  0 D
+    2 pairs,     0 triples,     0 quads

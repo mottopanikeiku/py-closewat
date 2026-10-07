@@ -1,0 +1,57 @@
+Run of closewat
+  ATOM records    HETATM records     Total        # of
+ non-water water non-water water non-water water Chains
+       521     0         0    64       521    64      1
+I  88 @  2.323 -19.638   7.496 clash  2.40 A to I 102 @  4.643 -20.183   7.815
+I  93 @ -3.208  -8.404  12.277 clash  2.26 A to I 107 @ -2.814 -10.035  13.791
+I  95 @ -8.502 -16.494  17.981 Hbond  3.13 A to I 115 @-10.533 -17.031  20.300
+I  96 @ 13.110 -21.154  18.099 Hbond  3.11 A to I 126 @ 13.468 -18.103  17.589
+I  97 @ 15.611 -24.679  18.097 Hbond  2.81 A to I 128 @ 18.407 -24.479  17.873
+I 102 @  4.643 -20.183   7.815 clash  2.40 A to I 102 @  2.323 -19.638   7.496
+I 104 @ 20.049 -19.093  13.191 clash  2.23 A to I 112 @ 19.516 -21.255  13.031
+I 105 @ -1.050 -35.346  12.637 clash  2.16 A to I 106 @ -0.528 -37.282  13.452
+I 105 @ -0.528 -37.282  13.452 clash  2.16 A to I 105 @ -1.050 -35.346  12.637
+I 107 @ -2.814 -10.035  13.791 clash  2.26 A to I 107 @ -3.208  -8.404  12.277
+I 109 @  2.064  -5.457  11.942 Hbond  2.89 A to I 125 @  4.800  -4.562  12.199
+I 104 @ 19.516 -21.255  13.031 clash  2.23 A to I 104 @ 20.049 -19.093  13.191
+I 115 @-10.533 -17.031  20.300 Hbond  3.13 A to I  95 @ -8.502 -16.494  17.981
+I 117 @ 19.782 -25.123  22.901 Hbond  2.74 A to I 134 @ 22.150 -25.947  24.001
+I 119 @ -5.628 -30.359  22.925 Hbond  2.60 A to I 140 @ -5.065 -32.731  22.028
+I 125 @  4.800  -4.562  12.199 Hbond  2.89 A to I 109 @  2.064  -5.457  11.942
+I 126 @ 13.468 -18.103  17.589 Hbond  3.11 A to I  96 @ 13.110 -21.154  18.099
+I 128 @ 18.407 -24.479  17.873 Hbond  2.81 A to I  97 @ 15.611 -24.679  18.097
+I 134 @ 22.150 -25.947  24.001 Hbond  2.74 A to I 117 @ 19.782 -25.123  22.901
+I 140 @ -5.065 -32.731  22.028 Hbond  2.60 A to I 119 @ -5.628 -30.359  22.925
+I 141 @ -2.568 -32.082  23.071 Hbond  2.78 A to I 140 @ -5.065 -32.731  22.028
+ Mean B value for waters:   32.190
+  Duo:  I 157:   -2.814  -10.035   13.791  0.66   7.66 (was I107 )
+                 -3.208   -8.404   12.277  0.34   7.66 (was I93 )
+  Duo:  I 158:    4.643  -20.183    7.815  0.68  10.61 (was I102 )
+                  2.323  -19.638    7.496  0.32  10.61 (was I88 )
+  Duo:  I 159:   20.049  -19.093   13.191  0.59  22.95 (was I104 )
+                 19.516  -21.255   13.031  0.41  22.95 (was I112 )
+  Duo:  I 160:   -1.050  -35.346   12.637  0.59  25.62 (was I105 )
+                 -0.528  -37.282   13.452  0.41  25.62 (was I106 )
+Multiple-conformation waters:     4 pairs,     0 triples,     0 quads
+     64 waters,    521 non-waters
+ Water molecules within    2.50 A of neighbors (or    1.50 A of H's)
+    Coordinates of Water Distance Renumbered   Original   Nearest Neighbor Atom
+       x       y       z               Water      Water  AtomID Renumbered   Original Diagnosis
+  -8.502 -16.494  17.981    2.495  HOH I 101  HOH I  95     OD2  ASP I  71  ASP I  71    bump
+  11.224 -29.647   8.973    2.406  HOH I 144  HOH I 135     O    LYS I  21  LYS I  21    edit
+  11.913 -34.478  18.581    2.391  HOH I 146  HOH I 139     O    GLN I  41  GLN I  41    edit
+  19.516 -21.255  13.031    2.374 BHOH I 169  HOH I 112     OD2  ASP I  64  ASP I  64    edit
+      4 close contacts noted:   1    bump,   3    edit
+Waters that are more than     3.90 A from the nearest heteroatom neighbor:
+  -3.023  -2.235  18.293    4.891  HOH I 116  HOH I 127     O    HOH I 143  HOH I 129
+   4.530 -28.781  -0.047    4.298  HOH I 118  HOH I 138     OE1  GLU I  23  GLU I  23
+  21.030 -19.090  21.742    4.834  HOH I 121  HOH I 130     O    HOH I 150  HOH I 113
+   5.641 -38.800  22.958    4.419  HOH I 125  HOH I 116     NE2  GLN I  41  GLN I  41
+  13.517 -29.044  26.642    6.194  HOH I 133  HOH I 121     O    HOH I 108  HOH I 120
+   1.881 -32.214  22.846    4.457  HOH I 136  HOH I 131     O    HOH I 122  HOH I 141
+  13.266 -20.427  23.057    5.013  HOH I 147  HOH I 118     O    HOH I 104  HOH I  96
+   1.459 -39.256   4.127    6.431  HOH I 149  HOH I 137     O    HOH I 155  HOH I 136
+   2.873 -36.659  17.649    4.118  HOH I 153  HOH I  94     O    HOH I 148  HOH I 114
+      9 waters are too far from all neighbors
+    64 total waters:    56 unconformed, lone conformers:  0 A,  0 B,  0 C,  0 D
+    4 pairs,     0 triples,     0 quads

@@ -1,0 +1,188 @@
+{
+  "1IR0-pair": {
+    "c_waters": 2,
+    "python_waters": 2,
+    "byte_equal": false,
+    "parsed_equal_in_order": false,
+    "same_serial_order": true,
+    "only_c_serials": [],
+    "only_python_serials": [],
+    "different_waters": 2,
+    "field_mismatches": {
+      "bfactor": 2,
+      "resnum": 2
+    },
+    "differences": [
+      {
+        "serial": 693,
+        "field": "resnum",
+        "c": 111,
+        "python": 1
+      },
+      {
+        "serial": 693,
+        "field": "bfactor",
+        "c": 9.54,
+        "python": 8.35
+      },
+      {
+        "serial": 753,
+        "field": "resnum",
+        "c": 111,
+        "python": 2
+      },
+      {
+        "serial": 753,
+        "field": "bfactor",
+        "c": 9.54,
+        "python": 8.35
+      }
+    ]
+  },
+  "1UBQ-pair": {
+    "c_waters": 2,
+    "python_waters": 2,
+    "byte_equal": false,
+    "parsed_equal_in_order": false,
+    "same_serial_order": true,
+    "only_c_serials": [],
+    "only_python_serials": [],
+    "different_waters": 2,
+    "field_mismatches": {
+      "bfactor": 2,
+      "occupancy": 2,
+      "resnum": 2
+    },
+    "differences": [
+      {
+        "serial": 641,
+        "field": "resnum",
+        "c": 111,
+        "python": 2
+      },
+      {
+        "serial": 641,
+        "field": "occupancy",
+        "c": 0.35,
+        "python": 0.34
+      },
+      {
+        "serial": 641,
+        "field": "bfactor",
+        "c": 25.44,
+        "python": 20.9
+      },
+      {
+        "serial": 649,
+        "field": "resnum",
+        "c": 111,
+        "python": 1
+      },
+      {
+        "serial": 649,
+        "field": "occupancy",
+        "c": 0.65,
+        "python": 0.66
+      },
+      {
+        "serial": 649,
+        "field": "bfactor",
+        "c": 25.44,
+        "python": 20.9
+      }
+    ]
+  },
+  "1CTF-pair": {
+    "c_waters": 2,
+    "python_waters": 2,
+    "byte_equal": false,
+    "parsed_equal_in_order": false,
+    "same_serial_order": true,
+    "only_c_serials": [],
+    "only_python_serials": [],
+    "different_waters": 2,
+    "field_mismatches": {
+      "occupancy": 2,
+      "resnum": 2
+    },
+    "differences": [
+      {
+        "serial": 524,
+        "field": "resnum",
+        "c": 211,
+        "python": 1
+      },
+      {
+        "serial": 524,
+        "field": "occupancy",
+        "c": 0.57,
+        "python": 0.58
+      },
+      {
+        "serial": 544,
+        "field": "resnum",
+        "c": 211,
+        "python": 2
+      },
+      {
+        "serial": 544,
+        "field": "occupancy",
+        "c": 0.43,
+        "python": 0.42
+      }
+    ]
+  },
+  "2CI2-pair": {
+    "c_waters": 2,
+    "python_waters": 2,
+    "byte_equal": false,
+    "parsed_equal_in_order": false,
+    "same_serial_order": true,
+    "only_c_serials": [],
+    "only_python_serials": [],
+    "different_waters": 2,
+    "field_mismatches": {
+      "bfactor": 2,
+      "occupancy": 2,
+      "resnum": 2
+    },
+    "differences": [
+      {
+        "serial": 527,
+        "field": "resnum",
+        "c": 111,
+        "python": 2
+      },
+      {
+        "serial": 527,
+        "field": "occupancy",
+        "c": 0.37,
+        "python": 0.32
+      },
+      {
+        "serial": 527,
+        "field": "bfactor",
+        "c": 12.76,
+        "python": 10.61
+      },
+      {
+        "serial": 541,
+        "field": "resnum",
+        "c": 111,
+        "python": 1
+      },
+      {
+        "serial": 541,
+        "field": "occupancy",
+        "c": 0.63,
+        "python": 0.68
+      },
+      {
+        "serial": 541,
+        "field": "bfactor",
+        "c": 12.76,
+        "python": 10.61
+      }
+    ]
+  }
+}

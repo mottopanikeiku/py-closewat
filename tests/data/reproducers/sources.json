@@ -1,0 +1,34 @@
+{
+  "1IR0-pair": {
+    "source": "1IR0.pdb",
+    "water_serials": [
+      693,
+      753
+    ],
+    "reason": "Extracted pair with a saved occupancy or B-factor disagreement; nearest non-water and chain maximum retained."
+  },
+  "1UBQ-pair": {
+    "source": "tests/data/1UBQ.pdb",
+    "water_serials": [
+      649,
+      641
+    ],
+    "reason": "Extracted pair with a saved occupancy or B-factor disagreement; nearest non-water and chain maximum retained."
+  },
+  "1CTF-pair": {
+    "source": "tests/data/1CTF.pdb",
+    "water_serials": [
+      524,
+      544
+    ],
+    "reason": "Extracted pair with a saved occupancy or B-factor disagreement; nearest non-water and chain maximum retained."
+  },
+  "2CI2-pair": {
+    "source": "tests/data/2CI2.pdb",
+    "water_serials": [
+      541,
+      527
+    ],
+    "reason": "Extracted pair with a saved occupancy or B-factor disagreement; nearest non-water and chain maximum retained."
+  }
+}

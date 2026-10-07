@@ -1,0 +1,2122 @@
+{
+  "options": "default (no flags)",
+  "cases": {
+    "1IR0": {
+      "input_sha256": "ab18b9e79231f4a6ba450fabefd3e059ca809d3886370d0baed90bb71c959843",
+      "c_waters": 129,
+      "python_waters": 129,
+      "byte_equal": false,
+      "parsed_equal_in_order": false,
+      "same_serial_order": false,
+      "only_c_serials": [],
+      "only_python_serials": [],
+      "different_waters": 129,
+      "field_mismatches": {
+        "bfactor": 2,
+        "resnum": 129
+      },
+      "differences": [
+        {
+          "serial": 645,
+          "field": "resnum",
+          "c": 106,
+          "python": 6
+        },
+        {
+          "serial": 646,
+          "field": "resnum",
+          "c": 101,
+          "python": 1
+        },
+        {
+          "serial": 647,
+          "field": "resnum",
+          "c": 116,
+          "python": 16
+        },
+        {
+          "serial": 648,
+          "field": "resnum",
+          "c": 119,
+          "python": 19
+        },
+        {
+          "serial": 649,
+          "field": "resnum",
+          "c": 111,
+          "python": 11
+        },
+        {
+          "serial": 650,
+          "field": "resnum",
+          "c": 187,
+          "python": 87
+        },
+        {
+          "serial": 651,
+          "field": "resnum",
+          "c": 122,
+          "python": 22
+        },
+        {
+          "serial": 652,
+          "field": "resnum",
+          "c": 107,
+          "python": 7
+        },
+        {
+          "serial": 653,
+          "field": "resnum",
+          "c": 148,
+          "python": 47
+        },
+        {
+          "serial": 654,
+          "field": "resnum",
+          "c": 188,
+          "python": 88
+        },
+        {
+          "serial": 655,
+          "field": "resnum",
+          "c": 109,
+          "python": 9
+        },
+        {
+          "serial": 656,
+          "field": "resnum",
+          "c": 105,
+          "python": 5
+        },
+        {
+          "serial": 657,
+          "field": "resnum",
+          "c": 110,
+          "python": 10
+        },
+        {
+          "serial": 658,
+          "field": "resnum",
+          "c": 102,
+          "python": 2
+        },
+        {
+          "serial": 659,
+          "field": "resnum",
+          "c": 146,
+          "python": 46
+        },
+        {
+          "serial": 660,
+          "field": "resnum",
+          "c": 138,
+          "python": 38
+        },
+        {
+          "serial": 661,
+          "field": "resnum",
+          "c": 158,
+          "python": 58
+        },
+        {
+          "serial": 662,
+          "field": "resnum",
+          "c": 112,
+          "python": 12
+        },
+        {
+          "serial": 663,
+          "field": "resnum",
+          "c": 117,
+          "python": 17
+        },
+        {
+          "serial": 664,
+          "field": "resnum",
+          "c": 108,
+          "python": 8
+        },
+        {
+          "serial": 665,
+          "field": "resnum",
+          "c": 128,
+          "python": 28
+        },
+        {
+          "serial": 666,
+          "field": "resnum",
+          "c": 121,
+          "python": 21
+        },
+        {
+          "serial": 667,
+          "field": "resnum",
+          "c": 154,
+          "python": 54
+        },
+        {
+          "serial": 668,
+          "field": "resnum",
+          "c": 103,
+          "python": 3
+        },
+        {
+          "serial": 669,
+          "field": "resnum",
+          "c": 113,
+          "python": 13
+        },
+        {
+          "serial": 670,
+          "field": "resnum",
+          "c": 155,
+          "python": 55
+        },
+        {
+          "serial": 671,
+          "field": "resnum",
+          "c": 115,
+          "python": 14
+        },
+        {
+          "serial": 672,
+          "field": "resnum",
+          "c": 134,
+          "python": 34
+        },
+        {
+          "serial": 673,
+          "field": "resnum",
+          "c": 126,
+          "python": 26
+        },
+        {
+          "serial": 674,
+          "field": "resnum",
+          "c": 139,
+          "python": 39
+        },
+        {
+          "serial": 675,
+          "field": "resnum",
+          "c": 192,
+          "python": 92
+        },
+        {
+          "serial": 676,
+          "field": "resnum",
+          "c": 123,
+          "python": 23
+        },
+        {
+          "serial": 677,
+          "field": "resnum",
+          "c": 179,
+          "python": 79
+        },
+        {
+          "serial": 678,
+          "field": "resnum",
+          "c": 114,
+          "python": 15
+        },
+        {
+          "serial": 679,
+          "field": "resnum",
+          "c": 175,
+          "python": 75
+        },
+        {
+          "serial": 680,
+          "field": "resnum",
+          "c": 125,
+          "python": 25
+        },
+        {
+          "serial": 681,
+          "field": "resnum",
+          "c": 124,
+          "python": 24
+        },
+        {
+          "serial": 682,
+          "field": "resnum",
+          "c": 180,
+          "python": 80
+        },
+        {
+          "serial": 683,
+          "field": "resnum",
+          "c": 104,
+          "python": 4
+        },
+        {
+          "serial": 684,
+          "field": "resnum",
+          "c": 169,
+          "python": 69
+        },
+        {
+          "serial": 685,
+          "field": "resnum",
+          "c": 157,
+          "python": 57
+        },
+        {
+          "serial": 686,
+          "field": "resnum",
+          "c": 159,
+          "python": 59
+        },
+        {
+          "serial": 687,
+          "field": "resnum",
+          "c": 131,
+          "python": 31
+        },
+        {
+          "serial": 688,
+          "field": "resnum",
+          "c": 178,
+          "python": 78
+        },
+        {
+          "serial": 689,
+          "field": "resnum",
+          "c": 141,
+          "python": 41
+        },
+        {
+          "serial": 690,
+          "field": "resnum",
+          "c": 183,
+          "python": 82
+        },
+        {
+          "serial": 691,
+          "field": "resnum",
+          "c": 168,
+          "python": 68
+        },
+        {
+          "serial": 692,
+          "field": "resnum",
+          "c": 161,
+          "python": 61
+        },
+        {
+          "serial": 693,
+          "field": "resnum",
+          "c": 238,
+          "python": 128
+        },
+        {
+          "serial": 693,
+          "field": "bfactor",
+          "c": 9.54,
+          "python": 8.35
+        },
+        {
+          "serial": 694,
+          "field": "resnum",
+          "c": 181,
+          "python": 81
+        },
+        {
+          "serial": 695,
+          "field": "resnum",
+          "c": 143,
+          "python": 43
+        },
+        {
+          "serial": 696,
+          "field": "resnum",
+          "c": 201,
+          "python": 101
+        },
+        {
+          "serial": 697,
+          "field": "resnum",
+          "c": 137,
+          "python": 37
+        },
+        {
+          "serial": 698,
+          "field": "resnum",
+          "c": 202,
+          "python": 102
+        },
+        {
+          "serial": 699,
+          "field": "resnum",
+          "c": 118,
+          "python": 18
+        },
+        {
+          "serial": 700,
+          "field": "resnum",
+          "c": 151,
+          "python": 51
+        },
+        {
+          "serial": 701,
+          "field": "resnum",
+          "c": 211,
+          "python": 111
+        },
+        {
+          "serial": 702,
+          "field": "resnum",
+          "c": 147,
+          "python": 48
+        },
+        {
+          "serial": 703,
+          "field": "resnum",
+          "c": 216,
+          "python": 116
+        },
+        {
+          "serial": 704,
+          "field": "resnum",
+          "c": 189,
+          "python": 89
+        },
+        {
+          "serial": 705,
+          "field": "resnum",
+          "c": 145,
+          "python": 45
+        },
+        {
+          "serial": 706,
+          "field": "resnum",
+          "c": 217,
+          "python": 117
+        },
+        {
+          "serial": 707,
+          "field": "resnum",
+          "c": 133,
+          "python": 33
+        },
+        {
+          "serial": 708,
+          "field": "resnum",
+          "c": 198,
+          "python": 98
+        },
+        {
+          "serial": 709,
+          "field": "resnum",
+          "c": 120,
+          "python": 20
+        },
+        {
+          "serial": 710,
+          "field": "resnum",
+          "c": 156,
+          "python": 56
+        },
+        {
+          "serial": 711,
+          "field": "resnum",
+          "c": 163,
+          "python": 63
+        },
+        {
+          "serial": 712,
+          "field": "resnum",
+          "c": 184,
+          "python": 84
+        },
+        {
+          "serial": 713,
+          "field": "resnum",
+          "c": 140,
+          "python": 40
+        },
+        {
+          "serial": 714,
+          "field": "resnum",
+          "c": 177,
+          "python": 77
+        },
+        {
+          "serial": 715,
+          "field": "resnum",
+          "c": 152,
+          "python": 52
+        },
+        {
+          "serial": 716,
+          "field": "resnum",
+          "c": 194,
+          "python": 94
+        },
+        {
+          "serial": 717,
+          "field": "resnum",
+          "c": 160,
+          "python": 60
+        },
+        {
+          "serial": 718,
+          "field": "resnum",
+          "c": 191,
+          "python": 91
+        },
+        {
+          "serial": 719,
+          "field": "resnum",
+          "c": 196,
+          "python": 96
+        },
+        {
+          "serial": 720,
+          "field": "resnum",
+          "c": 149,
+          "python": 49
+        },
+        {
+          "serial": 721,
+          "field": "resnum",
+          "c": 127,
+          "python": 27
+        },
+        {
+          "serial": 722,
+          "field": "resnum",
+          "c": 132,
+          "python": 32
+        },
+        {
+          "serial": 723,
+          "field": "resnum",
+          "c": 129,
+          "python": 29
+        },
+        {
+          "serial": 724,
+          "field": "resnum",
+          "c": 225,
+          "python": 125
+        },
+        {
+          "serial": 725,
+          "field": "resnum",
+          "c": 150,
+          "python": 50
+        },
+        {
+          "serial": 726,
+          "field": "resnum",
+          "c": 190,
+          "python": 90
+        },
+        {
+          "serial": 727,
+          "field": "resnum",
+          "c": 142,
+          "python": 42
+        },
+        {
+          "serial": 728,
+          "field": "resnum",
+          "c": 174,
+          "python": 74
+        },
+        {
+          "serial": 729,
+          "field": "resnum",
+          "c": 214,
+          "python": 114
+        },
+        {
+          "serial": 730,
+          "field": "resnum",
+          "c": 212,
+          "python": 112
+        },
+        {
+          "serial": 731,
+          "field": "resnum",
+          "c": 213,
+          "python": 113
+        },
+        {
+          "serial": 732,
+          "field": "resnum",
+          "c": 172,
+          "python": 71
+        },
+        {
+          "serial": 733,
+          "field": "resnum",
+          "c": 182,
+          "python": 83
+        },
+        {
+          "serial": 734,
+          "field": "resnum",
+          "c": 153,
+          "python": 53
+        },
+        {
+          "serial": 735,
+          "field": "resnum",
+          "c": 224,
+          "python": 124
+        },
+        {
+          "serial": 736,
+          "field": "resnum",
+          "c": 206,
+          "python": 106
+        },
+        {
+          "serial": 737,
+          "field": "resnum",
+          "c": 203,
+          "python": 103
+        },
+        {
+          "serial": 738,
+          "field": "resnum",
+          "c": 210,
+          "python": 110
+        },
+        {
+          "serial": 739,
+          "field": "resnum",
+          "c": 171,
+          "python": 72
+        },
+        {
+          "serial": 740,
+          "field": "resnum",
+          "c": 197,
+          "python": 97
+        },
+        {
+          "serial": 741,
+          "field": "resnum",
+          "c": 176,
+          "python": 76
+        },
+        {
+          "serial": 742,
+          "field": "resnum",
+          "c": 144,
+          "python": 44
+        },
+        {
+          "serial": 743,
+          "field": "resnum",
+          "c": 219,
+          "python": 119
+        },
+        {
+          "serial": 744,
+          "field": "resnum",
+          "c": 173,
+          "python": 73
+        },
+        {
+          "serial": 745,
+          "field": "resnum",
+          "c": 164,
+          "python": 64
+        },
+        {
+          "serial": 746,
+          "field": "resnum",
+          "c": 165,
+          "python": 65
+        },
+        {
+          "serial": 747,
+          "field": "resnum",
+          "c": 167,
+          "python": 67
+        },
+        {
+          "serial": 748,
+          "field": "resnum",
+          "c": 130,
+          "python": 30
+        },
+        {
+          "serial": 749,
+          "field": "resnum",
+          "c": 193,
+          "python": 93
+        },
+        {
+          "serial": 750,
+          "field": "resnum",
+          "c": 199,
+          "python": 99
+        },
+        {
+          "serial": 751,
+          "field": "resnum",
+          "c": 170,
+          "python": 70
+        },
+        {
+          "serial": 752,
+          "field": "resnum",
+          "c": 195,
+          "python": 95
+        },
+        {
+          "serial": 753,
+          "field": "resnum",
+          "c": 238,
+          "python": 129
+        },
+        {
+          "serial": 753,
+          "field": "bfactor",
+          "c": 9.54,
+          "python": 8.35
+        },
+        {
+          "serial": 754,
+          "field": "resnum",
+          "c": 218,
+          "python": 118
+        },
+        {
+          "serial": 755,
+          "field": "resnum",
+          "c": 166,
+          "python": 66
+        },
+        {
+          "serial": 756,
+          "field": "resnum",
+          "c": 215,
+          "python": 115
+        },
+        {
+          "serial": 757,
+          "field": "resnum",
+          "c": 209,
+          "python": 109
+        },
+        {
+          "serial": 758,
+          "field": "resnum",
+          "c": 136,
+          "python": 36
+        },
+        {
+          "serial": 759,
+          "field": "resnum",
+          "c": 222,
+          "python": 122
+        },
+        {
+          "serial": 760,
+          "field": "resnum",
+          "c": 226,
+          "python": 126
+        },
+        {
+          "serial": 761,
+          "field": "resnum",
+          "c": 208,
+          "python": 108
+        },
+        {
+          "serial": 762,
+          "field": "resnum",
+          "c": 186,
+          "python": 86
+        },
+        {
+          "serial": 763,
+          "field": "resnum",
+          "c": 162,
+          "python": 62
+        },
+        {
+          "serial": 764,
+          "field": "resnum",
+          "c": 223,
+          "python": 123
+        },
+        {
+          "serial": 765,
+          "field": "resnum",
+          "c": 185,
+          "python": 85
+        },
+        {
+          "serial": 766,
+          "field": "resnum",
+          "c": 135,
+          "python": 35
+        },
+        {
+          "serial": 767,
+          "field": "resnum",
+          "c": 205,
+          "python": 105
+        },
+        {
+          "serial": 768,
+          "field": "resnum",
+          "c": 207,
+          "python": 107
+        },
+        {
+          "serial": 769,
+          "field": "resnum",
+          "c": 204,
+          "python": 104
+        },
+        {
+          "serial": 770,
+          "field": "resnum",
+          "c": 200,
+          "python": 100
+        },
+        {
+          "serial": 771,
+          "field": "resnum",
+          "c": 220,
+          "python": 120
+        },
+        {
+          "serial": 772,
+          "field": "resnum",
+          "c": 227,
+          "python": 127
+        },
+        {
+          "serial": 773,
+          "field": "resnum",
+          "c": 221,
+          "python": 121
+        }
+      ]
+    },
+    "1UBQ": {
+      "input_sha256": "d4a6812d8951cf6594e6a0763f089e35f5a80b62acb3c117b2c5565228a7b161",
+      "c_waters": 58,
+      "python_waters": 58,
+      "byte_equal": false,
+      "parsed_equal_in_order": false,
+      "same_serial_order": false,
+      "only_c_serials": [],
+      "only_python_serials": [],
+      "different_waters": 58,
+      "field_mismatches": {
+        "bfactor": 4,
+        "occupancy": 2,
+        "resnum": 58
+      },
+      "differences": [
+        {
+          "serial": 604,
+          "field": "resnum",
+          "c": 104,
+          "python": 4
+        },
+        {
+          "serial": 605,
+          "field": "resnum",
+          "c": 105,
+          "python": 5
+        },
+        {
+          "serial": 606,
+          "field": "resnum",
+          "c": 106,
+          "python": 6
+        },
+        {
+          "serial": 607,
+          "field": "resnum",
+          "c": 119,
+          "python": 19
+        },
+        {
+          "serial": 608,
+          "field": "resnum",
+          "c": 112,
+          "python": 12
+        },
+        {
+          "serial": 609,
+          "field": "resnum",
+          "c": 128,
+          "python": 28
+        },
+        {
+          "serial": 610,
+          "field": "resnum",
+          "c": 115,
+          "python": 15
+        },
+        {
+          "serial": 611,
+          "field": "resnum",
+          "c": 103,
+          "python": 3
+        },
+        {
+          "serial": 612,
+          "field": "resnum",
+          "c": 126,
+          "python": 26
+        },
+        {
+          "serial": 613,
+          "field": "resnum",
+          "c": 120,
+          "python": 20
+        },
+        {
+          "serial": 614,
+          "field": "resnum",
+          "c": 113,
+          "python": 13
+        },
+        {
+          "serial": 615,
+          "field": "resnum",
+          "c": 123,
+          "python": 23
+        },
+        {
+          "serial": 616,
+          "field": "resnum",
+          "c": 127,
+          "python": 27
+        },
+        {
+          "serial": 617,
+          "field": "resnum",
+          "c": 111,
+          "python": 11
+        },
+        {
+          "serial": 618,
+          "field": "resnum",
+          "c": 107,
+          "python": 7
+        },
+        {
+          "serial": 619,
+          "field": "resnum",
+          "c": 114,
+          "python": 14
+        },
+        {
+          "serial": 620,
+          "field": "resnum",
+          "c": 124,
+          "python": 24
+        },
+        {
+          "serial": 621,
+          "field": "resnum",
+          "c": 125,
+          "python": 25
+        },
+        {
+          "serial": 622,
+          "field": "resnum",
+          "c": 118,
+          "python": 18
+        },
+        {
+          "serial": 623,
+          "field": "resnum",
+          "c": 109,
+          "python": 9
+        },
+        {
+          "serial": 624,
+          "field": "resnum",
+          "c": 110,
+          "python": 10
+        },
+        {
+          "serial": 625,
+          "field": "resnum",
+          "c": 108,
+          "python": 8
+        },
+        {
+          "serial": 626,
+          "field": "resnum",
+          "c": 122,
+          "python": 22
+        },
+        {
+          "serial": 627,
+          "field": "resnum",
+          "c": 121,
+          "python": 21
+        },
+        {
+          "serial": 628,
+          "field": "resnum",
+          "c": 116,
+          "python": 16
+        },
+        {
+          "serial": 629,
+          "field": "resnum",
+          "c": 129,
+          "python": 29
+        },
+        {
+          "serial": 630,
+          "field": "resnum",
+          "c": 117,
+          "python": 17
+        },
+        {
+          "serial": 631,
+          "field": "resnum",
+          "c": 102,
+          "python": 2
+        },
+        {
+          "serial": 632,
+          "field": "resnum",
+          "c": 101,
+          "python": 1
+        },
+        {
+          "serial": 633,
+          "field": "resnum",
+          "c": 134,
+          "python": 34
+        },
+        {
+          "serial": 634,
+          "field": "resnum",
+          "c": 146,
+          "python": 46
+        },
+        {
+          "serial": 635,
+          "field": "resnum",
+          "c": 136,
+          "python": 36
+        },
+        {
+          "serial": 636,
+          "field": "resnum",
+          "c": 149,
+          "python": 49
+        },
+        {
+          "serial": 637,
+          "field": "resnum",
+          "c": 135,
+          "python": 35
+        },
+        {
+          "serial": 638,
+          "field": "resnum",
+          "c": 131,
+          "python": 31
+        },
+        {
+          "serial": 639,
+          "field": "resnum",
+          "c": 132,
+          "python": 32
+        },
+        {
+          "serial": 640,
+          "field": "resnum",
+          "c": 142,
+          "python": 42
+        },
+        {
+          "serial": 641,
+          "field": "resnum",
+          "c": 166,
+          "python": 58
+        },
+        {
+          "serial": 641,
+          "field": "occupancy",
+          "c": 0.35,
+          "python": 0.34
+        },
+        {
+          "serial": 641,
+          "field": "bfactor",
+          "c": 25.44,
+          "python": 20.9
+        },
+        {
+          "serial": 642,
+          "field": "resnum",
+          "c": 147,
+          "python": 47
+        },
+        {
+          "serial": 643,
+          "field": "resnum",
+          "c": 143,
+          "python": 43
+        },
+        {
+          "serial": 644,
+          "field": "resnum",
+          "c": 141,
+          "python": 41
+        },
+        {
+          "serial": 645,
+          "field": "resnum",
+          "c": 151,
+          "python": 51
+        },
+        {
+          "serial": 646,
+          "field": "resnum",
+          "c": 137,
+          "python": 37
+        },
+        {
+          "serial": 647,
+          "field": "resnum",
+          "c": 140,
+          "python": 40
+        },
+        {
+          "serial": 648,
+          "field": "resnum",
+          "c": 165,
+          "python": 57
+        },
+        {
+          "serial": 648,
+          "field": "bfactor",
+          "c": 23.46,
+          "python": 16.43
+        },
+        {
+          "serial": 649,
+          "field": "resnum",
+          "c": 166,
+          "python": 55
+        },
+        {
+          "serial": 649,
+          "field": "occupancy",
+          "c": 0.65,
+          "python": 0.66
+        },
+        {
+          "serial": 649,
+          "field": "bfactor",
+          "c": 25.44,
+          "python": 20.9
+        },
+        {
+          "serial": 650,
+          "field": "resnum",
+          "c": 153,
+          "python": 53
+        },
+        {
+          "serial": 651,
+          "field": "resnum",
+          "c": 152,
+          "python": 52
+        },
+        {
+          "serial": 652,
+          "field": "resnum",
+          "c": 138,
+          "python": 38
+        },
+        {
+          "serial": 653,
+          "field": "resnum",
+          "c": 130,
+          "python": 30
+        },
+        {
+          "serial": 654,
+          "field": "resnum",
+          "c": 139,
+          "python": 39
+        },
+        {
+          "serial": 655,
+          "field": "resnum",
+          "c": 165,
+          "python": 56
+        },
+        {
+          "serial": 655,
+          "field": "bfactor",
+          "c": 23.46,
+          "python": 16.43
+        },
+        {
+          "serial": 656,
+          "field": "resnum",
+          "c": 144,
+          "python": 44
+        },
+        {
+          "serial": 657,
+          "field": "resnum",
+          "c": 145,
+          "python": 45
+        },
+        {
+          "serial": 658,
+          "field": "resnum",
+          "c": 154,
+          "python": 54
+        },
+        {
+          "serial": 659,
+          "field": "resnum",
+          "c": 150,
+          "python": 50
+        },
+        {
+          "serial": 660,
+          "field": "resnum",
+          "c": 133,
+          "python": 33
+        },
+        {
+          "serial": 661,
+          "field": "resnum",
+          "c": 148,
+          "python": 48
+        }
+      ]
+    },
+    "1CTF": {
+      "input_sha256": "d0d6bbbe48bcb09c737d06d65cd0e22f86c220b3c68fa7166449e42b43294266",
+      "c_waters": 62,
+      "python_waters": 62,
+      "byte_equal": false,
+      "parsed_equal_in_order": false,
+      "same_serial_order": false,
+      "only_c_serials": [],
+      "only_python_serials": [],
+      "different_waters": 62,
+      "field_mismatches": {
+        "bfactor": 2,
+        "occupancy": 4,
+        "resnum": 62
+      },
+      "differences": [
+        {
+          "serial": 494,
+          "field": "resnum",
+          "c": 201,
+          "python": 1
+        },
+        {
+          "serial": 495,
+          "field": "resnum",
+          "c": 202,
+          "python": 2
+        },
+        {
+          "serial": 496,
+          "field": "resnum",
+          "c": 203,
+          "python": 3
+        },
+        {
+          "serial": 497,
+          "field": "resnum",
+          "c": 204,
+          "python": 4
+        },
+        {
+          "serial": 498,
+          "field": "resnum",
+          "c": 205,
+          "python": 5
+        },
+        {
+          "serial": 499,
+          "field": "resnum",
+          "c": 206,
+          "python": 6
+        },
+        {
+          "serial": 500,
+          "field": "resnum",
+          "c": 207,
+          "python": 7
+        },
+        {
+          "serial": 501,
+          "field": "resnum",
+          "c": 208,
+          "python": 8
+        },
+        {
+          "serial": 502,
+          "field": "resnum",
+          "c": 209,
+          "python": 9
+        },
+        {
+          "serial": 503,
+          "field": "resnum",
+          "c": 210,
+          "python": 10
+        },
+        {
+          "serial": 504,
+          "field": "resnum",
+          "c": 211,
+          "python": 11
+        },
+        {
+          "serial": 505,
+          "field": "resnum",
+          "c": 212,
+          "python": 12
+        },
+        {
+          "serial": 506,
+          "field": "resnum",
+          "c": 213,
+          "python": 13
+        },
+        {
+          "serial": 507,
+          "field": "resnum",
+          "c": 214,
+          "python": 14
+        },
+        {
+          "serial": 508,
+          "field": "resnum",
+          "c": 215,
+          "python": 15
+        },
+        {
+          "serial": 509,
+          "field": "resnum",
+          "c": 216,
+          "python": 16
+        },
+        {
+          "serial": 510,
+          "field": "resnum",
+          "c": 217,
+          "python": 17
+        },
+        {
+          "serial": 511,
+          "field": "resnum",
+          "c": 218,
+          "python": 18
+        },
+        {
+          "serial": 512,
+          "field": "resnum",
+          "c": 219,
+          "python": 19
+        },
+        {
+          "serial": 513,
+          "field": "resnum",
+          "c": 220,
+          "python": 20
+        },
+        {
+          "serial": 514,
+          "field": "resnum",
+          "c": 221,
+          "python": 21
+        },
+        {
+          "serial": 515,
+          "field": "resnum",
+          "c": 222,
+          "python": 22
+        },
+        {
+          "serial": 516,
+          "field": "resnum",
+          "c": 223,
+          "python": 23
+        },
+        {
+          "serial": 517,
+          "field": "resnum",
+          "c": 224,
+          "python": 24
+        },
+        {
+          "serial": 518,
+          "field": "resnum",
+          "c": 225,
+          "python": 25
+        },
+        {
+          "serial": 519,
+          "field": "resnum",
+          "c": 226,
+          "python": 26
+        },
+        {
+          "serial": 520,
+          "field": "resnum",
+          "c": 227,
+          "python": 27
+        },
+        {
+          "serial": 521,
+          "field": "resnum",
+          "c": 228,
+          "python": 28
+        },
+        {
+          "serial": 522,
+          "field": "resnum",
+          "c": 229,
+          "python": 29
+        },
+        {
+          "serial": 523,
+          "field": "resnum",
+          "c": 269,
+          "python": 57
+        },
+        {
+          "serial": 523,
+          "field": "bfactor",
+          "c": 30.5,
+          "python": 28.71
+        },
+        {
+          "serial": 524,
+          "field": "resnum",
+          "c": 267,
+          "python": 58
+        },
+        {
+          "serial": 524,
+          "field": "occupancy",
+          "c": 0.57,
+          "python": 0.58
+        },
+        {
+          "serial": 525,
+          "field": "resnum",
+          "c": 268,
+          "python": 59
+        },
+        {
+          "serial": 525,
+          "field": "occupancy",
+          "c": 0.55,
+          "python": 0.56
+        },
+        {
+          "serial": 526,
+          "field": "resnum",
+          "c": 230,
+          "python": 30
+        },
+        {
+          "serial": 527,
+          "field": "resnum",
+          "c": 231,
+          "python": 31
+        },
+        {
+          "serial": 528,
+          "field": "resnum",
+          "c": 232,
+          "python": 32
+        },
+        {
+          "serial": 529,
+          "field": "resnum",
+          "c": 233,
+          "python": 33
+        },
+        {
+          "serial": 530,
+          "field": "resnum",
+          "c": 234,
+          "python": 34
+        },
+        {
+          "serial": 531,
+          "field": "resnum",
+          "c": 235,
+          "python": 35
+        },
+        {
+          "serial": 532,
+          "field": "resnum",
+          "c": 236,
+          "python": 36
+        },
+        {
+          "serial": 533,
+          "field": "resnum",
+          "c": 269,
+          "python": 62
+        },
+        {
+          "serial": 533,
+          "field": "bfactor",
+          "c": 30.5,
+          "python": 28.71
+        },
+        {
+          "serial": 534,
+          "field": "resnum",
+          "c": 237,
+          "python": 37
+        },
+        {
+          "serial": 535,
+          "field": "resnum",
+          "c": 238,
+          "python": 38
+        },
+        {
+          "serial": 536,
+          "field": "resnum",
+          "c": 239,
+          "python": 39
+        },
+        {
+          "serial": 537,
+          "field": "resnum",
+          "c": 240,
+          "python": 40
+        },
+        {
+          "serial": 538,
+          "field": "resnum",
+          "c": 241,
+          "python": 41
+        },
+        {
+          "serial": 539,
+          "field": "resnum",
+          "c": 242,
+          "python": 42
+        },
+        {
+          "serial": 540,
+          "field": "resnum",
+          "c": 243,
+          "python": 43
+        },
+        {
+          "serial": 541,
+          "field": "resnum",
+          "c": 268,
+          "python": 60
+        },
+        {
+          "serial": 541,
+          "field": "occupancy",
+          "c": 0.45,
+          "python": 0.44
+        },
+        {
+          "serial": 542,
+          "field": "resnum",
+          "c": 244,
+          "python": 44
+        },
+        {
+          "serial": 543,
+          "field": "resnum",
+          "c": 245,
+          "python": 45
+        },
+        {
+          "serial": 544,
+          "field": "resnum",
+          "c": 267,
+          "python": 61
+        },
+        {
+          "serial": 544,
+          "field": "occupancy",
+          "c": 0.43,
+          "python": 0.42
+        },
+        {
+          "serial": 545,
+          "field": "resnum",
+          "c": 246,
+          "python": 46
+        },
+        {
+          "serial": 546,
+          "field": "resnum",
+          "c": 247,
+          "python": 47
+        },
+        {
+          "serial": 547,
+          "field": "resnum",
+          "c": 248,
+          "python": 48
+        },
+        {
+          "serial": 548,
+          "field": "resnum",
+          "c": 249,
+          "python": 49
+        },
+        {
+          "serial": 549,
+          "field": "resnum",
+          "c": 250,
+          "python": 50
+        },
+        {
+          "serial": 550,
+          "field": "resnum",
+          "c": 251,
+          "python": 51
+        },
+        {
+          "serial": 551,
+          "field": "resnum",
+          "c": 252,
+          "python": 52
+        },
+        {
+          "serial": 552,
+          "field": "resnum",
+          "c": 256,
+          "python": 56
+        },
+        {
+          "serial": 553,
+          "field": "resnum",
+          "c": 253,
+          "python": 53
+        },
+        {
+          "serial": 554,
+          "field": "resnum",
+          "c": 254,
+          "python": 54
+        },
+        {
+          "serial": 555,
+          "field": "resnum",
+          "c": 255,
+          "python": 55
+        }
+      ]
+    },
+    "2CI2": {
+      "input_sha256": "8a42f06a0a59074eddf9ac6274962057fc965a1256dce268d96b9d903ba4ae4d",
+      "c_waters": 64,
+      "python_waters": 64,
+      "byte_equal": false,
+      "parsed_equal_in_order": false,
+      "same_serial_order": false,
+      "only_c_serials": [],
+      "only_python_serials": [],
+      "different_waters": 64,
+      "field_mismatches": {
+        "bfactor": 8,
+        "occupancy": 6,
+        "resnum": 64
+      },
+      "differences": [
+        {
+          "serial": 523,
+          "field": "resnum",
+          "c": 106,
+          "python": 6
+        },
+        {
+          "serial": 524,
+          "field": "resnum",
+          "c": 127,
+          "python": 27
+        },
+        {
+          "serial": 525,
+          "field": "resnum",
+          "c": 130,
+          "python": 30
+        },
+        {
+          "serial": 526,
+          "field": "resnum",
+          "c": 113,
+          "python": 13
+        },
+        {
+          "serial": 527,
+          "field": "resnum",
+          "c": 168,
+          "python": 64
+        },
+        {
+          "serial": 527,
+          "field": "occupancy",
+          "c": 0.37,
+          "python": 0.32
+        },
+        {
+          "serial": 527,
+          "field": "bfactor",
+          "c": 12.76,
+          "python": 10.61
+        },
+        {
+          "serial": 528,
+          "field": "resnum",
+          "c": 102,
+          "python": 2
+        },
+        {
+          "serial": 529,
+          "field": "resnum",
+          "c": 145,
+          "python": 45
+        },
+        {
+          "serial": 530,
+          "field": "resnum",
+          "c": 132,
+          "python": 32
+        },
+        {
+          "serial": 531,
+          "field": "resnum",
+          "c": 107,
+          "python": 7
+        },
+        {
+          "serial": 532,
+          "field": "resnum",
+          "c": 167,
+          "python": 63
+        },
+        {
+          "serial": 532,
+          "field": "occupancy",
+          "c": 0.39,
+          "python": 0.34
+        },
+        {
+          "serial": 532,
+          "field": "bfactor",
+          "c": 9.33,
+          "python": 7.66
+        },
+        {
+          "serial": 533,
+          "field": "resnum",
+          "c": 153,
+          "python": 53
+        },
+        {
+          "serial": 534,
+          "field": "resnum",
+          "c": 101,
+          "python": 1
+        },
+        {
+          "serial": 535,
+          "field": "resnum",
+          "c": 104,
+          "python": 4
+        },
+        {
+          "serial": 536,
+          "field": "resnum",
+          "c": 103,
+          "python": 3
+        },
+        {
+          "serial": 537,
+          "field": "resnum",
+          "c": 111,
+          "python": 11
+        },
+        {
+          "serial": 538,
+          "field": "resnum",
+          "c": 117,
+          "python": 17
+        },
+        {
+          "serial": 539,
+          "field": "resnum",
+          "c": 105,
+          "python": 5
+        },
+        {
+          "serial": 540,
+          "field": "resnum",
+          "c": 119,
+          "python": 19
+        },
+        {
+          "serial": 541,
+          "field": "resnum",
+          "c": 168,
+          "python": 57
+        },
+        {
+          "serial": 541,
+          "field": "occupancy",
+          "c": 0.63,
+          "python": 0.68
+        },
+        {
+          "serial": 541,
+          "field": "bfactor",
+          "c": 12.76,
+          "python": 10.61
+        },
+        {
+          "serial": 542,
+          "field": "resnum",
+          "c": 156,
+          "python": 56
+        },
+        {
+          "serial": 543,
+          "field": "resnum",
+          "c": 169,
+          "python": 59
+        },
+        {
+          "serial": 543,
+          "field": "occupancy",
+          "c": 0.58,
+          "python": 0.59
+        },
+        {
+          "serial": 543,
+          "field": "bfactor",
+          "c": 25.12,
+          "python": 22.95
+        },
+        {
+          "serial": 544,
+          "field": "resnum",
+          "c": 170,
+          "python": 60
+        },
+        {
+          "serial": 544,
+          "field": "bfactor",
+          "c": 27.63,
+          "python": 25.62
+        },
+        {
+          "serial": 545,
+          "field": "resnum",
+          "c": 170,
+          "python": 61
+        },
+        {
+          "serial": 545,
+          "field": "bfactor",
+          "c": 27.63,
+          "python": 25.62
+        },
+        {
+          "serial": 546,
+          "field": "resnum",
+          "c": 167,
+          "python": 58
+        },
+        {
+          "serial": 546,
+          "field": "occupancy",
+          "c": 0.61,
+          "python": 0.66
+        },
+        {
+          "serial": 546,
+          "field": "bfactor",
+          "c": 9.33,
+          "python": 7.66
+        },
+        {
+          "serial": 547,
+          "field": "resnum",
+          "c": 124,
+          "python": 24
+        },
+        {
+          "serial": 548,
+          "field": "resnum",
+          "c": 126,
+          "python": 26
+        },
+        {
+          "serial": 549,
+          "field": "resnum",
+          "c": 109,
+          "python": 9
+        },
+        {
+          "serial": 550,
+          "field": "resnum",
+          "c": 114,
+          "python": 14
+        },
+        {
+          "serial": 551,
+          "field": "resnum",
+          "c": 169,
+          "python": 62
+        },
+        {
+          "serial": 551,
+          "field": "occupancy",
+          "c": 0.42,
+          "python": 0.41
+        },
+        {
+          "serial": 551,
+          "field": "bfactor",
+          "c": 25.12,
+          "python": 22.95
+        },
+        {
+          "serial": 552,
+          "field": "resnum",
+          "c": 150,
+          "python": 50
+        },
+        {
+          "serial": 553,
+          "field": "resnum",
+          "c": 148,
+          "python": 48
+        },
+        {
+          "serial": 554,
+          "field": "resnum",
+          "c": 151,
+          "python": 51
+        },
+        {
+          "serial": 555,
+          "field": "resnum",
+          "c": 125,
+          "python": 25
+        },
+        {
+          "serial": 556,
+          "field": "resnum",
+          "c": 138,
+          "python": 38
+        },
+        {
+          "serial": 557,
+          "field": "resnum",
+          "c": 147,
+          "python": 47
+        },
+        {
+          "serial": 558,
+          "field": "resnum",
+          "c": 142,
+          "python": 42
+        },
+        {
+          "serial": 559,
+          "field": "resnum",
+          "c": 108,
+          "python": 8
+        },
+        {
+          "serial": 560,
+          "field": "resnum",
+          "c": 133,
+          "python": 33
+        },
+        {
+          "serial": 561,
+          "field": "resnum",
+          "c": 128,
+          "python": 28
+        },
+        {
+          "serial": 562,
+          "field": "resnum",
+          "c": 112,
+          "python": 12
+        },
+        {
+          "serial": 563,
+          "field": "resnum",
+          "c": 131,
+          "python": 31
+        },
+        {
+          "serial": 564,
+          "field": "resnum",
+          "c": 115,
+          "python": 15
+        },
+        {
+          "serial": 565,
+          "field": "resnum",
+          "c": 140,
+          "python": 40
+        },
+        {
+          "serial": 566,
+          "field": "resnum",
+          "c": 116,
+          "python": 16
+        },
+        {
+          "serial": 567,
+          "field": "resnum",
+          "c": 152,
+          "python": 52
+        },
+        {
+          "serial": 568,
+          "field": "resnum",
+          "c": 143,
+          "python": 43
+        },
+        {
+          "serial": 569,
+          "field": "resnum",
+          "c": 121,
+          "python": 21
+        },
+        {
+          "serial": 570,
+          "field": "resnum",
+          "c": 136,
+          "python": 36
+        },
+        {
+          "serial": 571,
+          "field": "resnum",
+          "c": 134,
+          "python": 34
+        },
+        {
+          "serial": 572,
+          "field": "resnum",
+          "c": 123,
+          "python": 23
+        },
+        {
+          "serial": 573,
+          "field": "resnum",
+          "c": 135,
+          "python": 35
+        },
+        {
+          "serial": 574,
+          "field": "resnum",
+          "c": 144,
+          "python": 44
+        },
+        {
+          "serial": 575,
+          "field": "resnum",
+          "c": 155,
+          "python": 55
+        },
+        {
+          "serial": 576,
+          "field": "resnum",
+          "c": 149,
+          "python": 49
+        },
+        {
+          "serial": 577,
+          "field": "resnum",
+          "c": 118,
+          "python": 18
+        },
+        {
+          "serial": 578,
+          "field": "resnum",
+          "c": 146,
+          "python": 46
+        },
+        {
+          "serial": 579,
+          "field": "resnum",
+          "c": 137,
+          "python": 37
+        },
+        {
+          "serial": 580,
+          "field": "resnum",
+          "c": 122,
+          "python": 22
+        },
+        {
+          "serial": 581,
+          "field": "resnum",
+          "c": 120,
+          "python": 20
+        },
+        {
+          "serial": 582,
+          "field": "resnum",
+          "c": 129,
+          "python": 29
+        },
+        {
+          "serial": 583,
+          "field": "resnum",
+          "c": 110,
+          "python": 10
+        },
+        {
+          "serial": 584,
+          "field": "resnum",
+          "c": 154,
+          "python": 54
+        },
+        {
+          "serial": 585,
+          "field": "resnum",
+          "c": 141,
+          "python": 41
+        },
+        {
+          "serial": 586,
+          "field": "resnum",
+          "c": 139,
+          "python": 39
+        }
+      ]
+    }
+  }
+}

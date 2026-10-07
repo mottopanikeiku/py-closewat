@@ -5,6 +5,7 @@ import os
 import argparse
 from typing import List, Dict, Tuple, Optional, Callable, Any, Union, Set
 from contextlib import contextmanager
+from functools import cmp_to_key
 
 # Constants from the original C code
 MAXHBONDSQ = 3.2 * 3.2  # default max H-bond dist squared
@@ -179,18 +180,29 @@ def get_sort_key_occ(pr: PDBRecord) -> Tuple[float, float]:
     """Get sorting key for occupancy-based sorting."""
     return (-pr.p_occ, pr.p_bval)  # Negative for descending order
 
-def get_sort_key_occb(pr: PDBRecord) -> Tuple[bool, float, float]:
-    """Get sorting key for conformer, occupancy, and B-value based sorting."""
-    has_conf = pr.p_conf != ' '
-    return (has_conf, -pr.p_occ, pr.p_bval)
+def compare_occb(pr0: PDBRecord, pr1: PDBRecord) -> int:
+    """Follow C's conformer grouping, then descending Q and ascending B."""
+    if pr1.p_conf != ' ':
+        if pr0.p_conf != ' ':
+            if (pr0.p_resnum, pr0.p_chainid) == (pr1.p_resnum, pr1.p_chainid):
+                return (pr0.p_conf > pr1.p_conf) - (pr0.p_conf < pr1.p_conf)
+            return -1 if pr0.p_bval < pr1.p_bval else 1
+        return -1
+    if pr0.p_conf != ' ':
+        return 1
+    if pr0.p_occ != pr1.p_occ:
+        return -1 if pr0.p_occ > pr1.p_occ else 1
+    return -1 if pr0.p_bval < pr1.p_bval else 1
 
 def get_sort_key_chain(pr: PDBRecord) -> Tuple[str, int, str]:
     """Get sorting key for chain-based sorting."""
     return (pr.p_chainid, pr.p_resnum, pr.p_conf)
 
-def get_sort_key_b(pr: PDBRecord) -> Tuple[int, float]:
-    """Get sorting key for B-value based sorting."""
-    return (pr.p_resnum, pr.p_bval)
+def compare_b(pr0: PDBRecord, pr1: PDBRecord) -> int:
+    """Keep a residue's conformers together while ordering groups by B."""
+    if pr0.p_resnum == pr1.p_resnum and pr0.p_conf != pr1.p_conf:
+        return -1 if pr0.p_conf < pr1.p_conf else 1
+    return -1 if pr0.p_bval <= pr1.p_bval else 1
 
 def validate_pdb_line(line: str) -> bool:
     """Validate PDB line format and length"""
@@ -430,6 +442,11 @@ def procpdblin(line: str, top: TotalSt) -> None:
             strtorec(line, new_record)
             top.tpat.append(new_record)
             top.tpatp += 1
+    if not is_water:
+        for chain in top.tchs:
+            if chain.c_chainid == new_record.p_chainid:
+                chain.c_minwat = max(chain.c_minwat, new_record.p_resnum)
+                break
 
 def ismetal(atstr: str) -> int:
     """Check if atom is a metal"""
@@ -881,71 +898,47 @@ def meanbw(top: TotalSt) -> None:
             top.tfpl.write("Warning: No valid B-values found for waters\n")
 
 def adjustqb(top: TotalSt, p0: PDBRecord) -> None:
-    """Adjusts quality (occupancy) and B values for multiple conformers"""
-    if p0 is None or p0.p_nbr is None:
+    """Port C's original-Q/B weighting and two-decimal occupancy correction."""
+    start = top.tpwa.index(p0)
+    group = top.tpwa[start:start + p0.p_nconfs]
+    for water in group:
+        water.p_bvo = max(2.0, water.p_bvo)
+    sumq = sum(w.p_occo for w in group)
+    if sumq < 0.0001:
         return
-    
-    # Get the neighboring waters
-    p1 = p0.p_nbr
-    if p1 is None:
+    bbar = sum(w.p_occo * w.p_bvo for w in group) / sumq
+    weights = [w.p_occo * bbar / w.p_bvo for w in group]
+    sumqp = sum(weights)
+    if sumqp < 0.0001:
         return
-    
-    p2 = p1.p_nbr if p1 is not None and p1.p_nbr is not None and p1.p_nbr != p0 else None
-    p3 = p2.p_nbr if p2 is not None and p2.p_nbr is not None and p2.p_nbr != p1 and p2.p_nbr != p0 else None
-    
-    # Array to hold the records for processing
-    records = [p0]
-    if p1 is not None:
-        records.append(p1)
-    if p2 is not None:
-        records.append(p2)
-    if p3 is not None:
-        records.append(p3)
-    
-    # Count total number of records
-    nrecs = len(records)
-    if nrecs <= 1:
-        return
-    
-    # Calculate average B value
-    total_b = sum(p.p_bval for p in records)
-    avg_b = total_b / nrecs
-    
-    # Calculate average occupancy
-    total_occ = sum(p.p_occ for p in records)
-    avg_occ = total_occ / nrecs
-    
-    # Adjust B values and occupancies
-    scale_factor = 0.90
-    for i, p in enumerate(records):
-        # Set conformer ID based on position
-        p.p_conf = chr(ord('A') + i)
-        p.p_nconfs = nrecs
-        
-        # Adjust B value - use a scaled average with proper validation
-        new_b = scale_factor * avg_b
-        if new_b > 99.99:  # PDB format limit
-            if top.tfpl:
-                top.tfpl.write(f"Warning: Clamping B-factor from {new_b:.2f} to 99.99 for {p.p_conf}{p.p_resname} {p.p_chainid}{p.p_resnum:4d}\n")
-            new_b = 99.99
-        elif new_b < 0.0:  # B-factors shouldn't be negative
-            if top.tfpl:
-                top.tfpl.write(f"Warning: Clamping negative B-factor from {new_b:.2f} to 0.0 for {p.p_conf}{p.p_resname} {p.p_chainid}{p.p_resnum:4d}\n")
-            new_b = 0.0
-        p.p_bval = new_b
-        
-        # Adjust occupancy - for pairs, use 0.5/0.5, for triplets or more, distribute evenly
-        if nrecs == 2:
-            p.p_occ = 0.5
-        elif nrecs == 3:
-            p.p_occ = 0.33
-        elif nrecs == 4:
-            p.p_occ = 0.25
-        else:
-            p.p_occ = 1.0 / nrecs
-    
-    # Report the adjustment
-    reportmult(top, p0, 2)  # Report as "Adjusted"
+    variance = sum((w.p_bvo - bbar) ** 2 * w.p_occo for w in group)
+    spread = math.sqrt(variance / sumq) / bbar if variance > 0.0001 else 0.0
+    bmin = min(w.p_bvo for w in group)
+    scale = sumq / len(group)
+    if scale < 0.9:
+        bmin /= math.sqrt(max(0.49, scale))
+    bmin *= 0.8 if spread < 0.1 else (0.9 if spread < 0.2 else 0.95)
+    for water, weight in zip(group, weights):
+        water.p_occ = weight / sumqp
+        water.p_bval = bmin
+    if len(group) == 2:
+        if group[0].p_occ < group[1].p_occ:
+            group[0].p_conf, group[1].p_conf = 'B', 'A'
+    else:
+        group.sort(key=lambda w: -w.p_occ)
+        for i, water in enumerate(group):
+            water.p_conf = chr(ord('A') + i)
+        top.tpwa[start:start + len(group)] = group
+    rounded = [int(w.p_occ * 100.0 + 0.4999) for w in group]
+    rounded_sum = sum(rounded) / 100.0
+    if rounded_sum < 0.995:
+        group[0].p_occ = (rounded[0] + 1) / 100.0
+        total = sum(w.p_occ for w in group)
+        if total > 1.0:
+            group[0].p_occ -= total - 0.9995
+    elif rounded_sum > 1.005:
+        group[1].p_occ = (rounded[1] - 1) / 100.0
+
 
 def split4(top: TotalSt, pwap: PDBRecord) -> None:
     """Splits a group of four waters into two groups of 2 if possible"""
@@ -1101,91 +1094,86 @@ def reduceocc(top: TotalSt) -> None:
         top.tfpl.write(f"Reduced occupancy of {nreduced} waters with B > {bthresh:.2f}\n")
 
 def makechains(top: TotalSt) -> None:
-    """Figure out which chain each water belongs to"""
-    # Initialize chain information
-    for chain in top.tchs: # Iterate over active chains
-        chain.c_wat0 = 0
-        chain.c_watl1 = 0
-        chain.c_watm0 = 0
-        chain.c_watl = 0
-        chain.c_minwat = 1  # Default starting water number
-    
-    # Assign each water to the nearest protein chain
-    for pwap in top.tpwa[:top.tpwap]: # Iterate over active waters
-        nearest_chain_id = None # Store ID, not object, to avoid issues if chain list changes
-        min_dist = float('inf')
-        
-        # Find the nearest protein chain
-        for pat in top.tpat[:top.tpatp]: # Iterate over active protein atoms
-            if pat.p_chainid != ' ':  # Skip atoms without a chain
-                dist = pdbdist(pwap, pat)
-                if dist < min_dist:
-                    min_dist = dist
-                    nearest_chain_id = pat.p_chainid
-        
-        # Assign the water to the nearest chain
-        if nearest_chain_id is not None:
-            pwap.p_chainid = nearest_chain_id
-            
-            # Update the chain's water count
-            for chain in top.tchs: # Iterate over active chains
-                if chain.c_chainid == nearest_chain_id:
-                    chain.c_watl += 1
+    """Assign a nearest chain and one residue number per conformer group."""
+    for chain in top.tchs:
+        # C integer division truncates toward zero, including negative IDs.
+        chain.c_minwat = 100 * int((chain.c_minwat + 100) / 100) + 1
+        chain.c_curwat = chain.c_minwat
+    i = 0
+    while i < top.tpwap:
+        water = top.tpwa[i]
+        if water.p_conf in ('B', 'C'):
+            i += 1
+            continue
+        nearest = min(top.tpat[:top.tpatp],
+                      key=lambda atom: pdbdist(water, atom), default=None)
+        if nearest is None:
+            i += 1
+            continue
+        chain = next((c for c in top.tchs if c.c_chainid == nearest.p_chainid), None)
+        if chain is None:
+            i += 1
+            continue
+        old_id = (water.p_chainid, water.p_resnum)
+        group = [water]
+        if water.p_conf == 'A':
+            for conf in 'BCD':
+                j = i + len(group)
+                if j >= top.tpwap:
                     break
+                other = top.tpwa[j]
+                if (other.p_chainid, other.p_resnum) != old_id or other.p_conf != conf:
+                    break
+                group.append(other)
+        for member in group:
+            member.p_chainid = chain.c_chainid
+            member.p_resnum = chain.c_curwat
+        chain.c_curwat += 1
+        i += len(group)
+
 
 def adjustmult(top: TotalSt) -> None:
-    """Count and modify multiple conformers"""
-    # Count the number of waters in each chain
-    chain_counts: Dict[str, int] = {} # Added type hint for clarity
-    for pwap in top.tpwa[:top.tpwap]: # Iterate over active waters
-        if pwap.p_chainid not in chain_counts:
-            chain_counts[pwap.p_chainid] = 0
-        chain_counts[pwap.p_chainid] += 1
-    
-    # Initialize residue numbers for each chain
-    for chain in top.tchs: # Iterate over active chains
-        chain.c_curwat = chain.c_minwat
-    
-    # Assign residue numbers to waters based on their chain
-    # This loop needs index access for comparison with top.tpwa[i-1]
-    for i in range(top.tpwap):
-        pwap = top.tpwa[i]
-        for chain in top.tchs: # Iterate over active chains
-            if chain.c_chainid == pwap.p_chainid:
-                # If this is a new conformer (A or B), assign it the same residue number
-                if pwap.p_conf in ['A', 'B'] and i > 0 and \
-                   top.tpwa[i-1].p_conf in ['A', 'B'] and \
-                   top.tpwa[i-1].p_chainid == pwap.p_chainid and \
-                   top.tpwa[i-1].p_resnum == pwap.p_resnum:
-                    continue  # Keep the same residue number
-                else:
-                    # Assign a new residue number
-                    pwap.p_resnum = chain.c_curwat
-                    chain.c_curwat += 1
-                break
+    """Adjust adjacent A/B[/C/D] conformers, rather than renumbering them."""
+    i = 0
+    while i < top.tpwap - 1:
+        water = top.tpwa[i]
+        if water.p_conf == 'A' and top.tpwa[i + 1].p_conf == 'B':
+            adjustqb(top, water)
+            i += max(1, water.p_nconfs - 1)
+        else:
+            i += 1
+
 
 def sortmults(top: TotalSt) -> None:
-    """Reorder multiple-conformer waters within each chain"""
-    # Group waters by chain and residue number
-    chain_res_groups: Dict[Tuple[str, int], List[PDBRecord]] = {} # Added type hint
-    
-    for pwap in top.tpwa[:top.tpwap]: # Iterate over active waters
-        key = (pwap.p_chainid, pwap.p_resnum)
-        if key not in chain_res_groups:
-            chain_res_groups[key] = []
-        chain_res_groups[key].append(pwap)
-    
-    # Sort each group by conformer ID
-    for key, group in chain_res_groups.items():
-        if len(group) > 1:
-            # Sort by conformer ID (A before B before C, etc.)
-            group.sort(key=lambda x: x.p_conf)
-            
-            # Ensure that if there's an 'A' conformer, it has higher occupancy than 'B'
-            if len(group) >= 2 and group[0].p_conf == 'A' and group[1].p_conf == 'B':
-                if group[0].p_occ < group[1].p_occ:
-                    # Swap occupancies
-                    group[0].p_occ, group[1].p_occ = group[1].p_occ, group[0].p_occ
+    """Sort each chain's multiple conformers by B, leaving C's numbering gap."""
+    i = 0
+    while i < top.tpwap:
+        start = i
+        while i < top.tpwap and top.tpwa[i].p_conf == ' ':
+            i += 1
+        if i == top.tpwap:
+            return
+        chain_id = top.tpwa[i].p_chainid
+        chain = next(c for c in top.tchs if c.c_chainid == chain_id)
+        chain.c_wat0 = start
+        chain.c_watl1 = i
+        chain.c_watm0 = i + 1
+        first = i
+        while (i < top.tpwap and top.tpwa[i].p_chainid == chain_id
+               and top.tpwa[i].p_conf != ' '):
+            i += 1
+        group = sorted(top.tpwa[first:i], key=cmp_to_key(compare_b))
+        number = min(w.p_resnum for w in group)
+        previous = group[0].p_resnum
+        for water in group:
+            original = water.p_resnum
+            if original != previous:
+                previous = original
+                number += 1
+            water.p_resnum = number + NUMGAP
+        top.tpwa[first:i] = group
+        chain.c_watl = i
+
 
 def proximity(top: TotalSt) -> None:
     """For all waters, identify close contacts"""
@@ -1284,31 +1272,16 @@ def proximity(top: TotalSt) -> None:
     print(f" {top.tnclose:6d} {'water is' if top.tnclose == 1 else 'waters are'} too far from all neighbors")
 
 def insert_singles(top: TotalSt) -> None:
-    """Move single-conformation but conformation-marked waters into the empty zone
-    between the unconformation-marked waters and the multiple-conformation waters"""
-    # Count waters by type
-    unmarked_waters = []
-    single_conf_marked = []
-    multi_conf = []
-    
-    for pwap in top.tpwa[:top.tpwap]: # Iterate over active waters
-        if pwap.p_conf == ' ':
-            unmarked_waters.append(pwap)
-        elif pwap.p_nconfs == 1:
-            single_conf_marked.append(pwap)
-        else:
-            multi_conf.append(pwap)
-    
-    # If there are no single-conformation marked waters, nothing to do
-    if not single_conf_marked:
-        return
-    
-    # Create a new ordered list of waters
-    new_waters = unmarked_waters + single_conf_marked + multi_conf
-        
-    # Replace the original water list with the reordered one, only up to tpwap
-    for i in range(min(len(new_waters), top.tpwap)):
-        top.tpwa[i] = new_waters[i]
+    """Move newly marked singles within their chain, then restore numbering."""
+    for chain in top.tchs:
+        start, stop = chain.c_wat0, chain.c_watl1
+        singles = top.tpwa[start:stop]
+        top.tpwa[start:stop] = ([w for w in singles if w.p_conf == ' '] +
+                              [w for w in singles if w.p_conf != ' '])
+        chain.c_watl1 -= sum(w.p_conf != ' ' for w in singles)
+        for i in range(start, chain.c_watm0 - 1):
+            top.tpwa[i].p_resnum = chain.c_minwat + i - start
+
 
 def finalmult(top: TotalSt) -> None:
     """Final count of multiple conformers"""
@@ -1604,7 +1577,7 @@ def main() -> int:
         # Sort the active part of tpwa
         if tos.tnwaters > 0: # Only sort if there are waters
             active_waters = tos.tpwa[:tos.tnwaters]
-            active_waters.sort(key=get_sort_key_occb)
+            active_waters.sort(key=cmp_to_key(compare_occb))
             tos.tpwa[:tos.tnwaters] = active_waters
 
         makechains(tos)

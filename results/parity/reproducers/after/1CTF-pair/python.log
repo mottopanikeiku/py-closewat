@@ -1,0 +1,14 @@
+Run of pyclosewat.py
+A 151 @ 23.739  -5.237   0.079 clash  2.37 A to A 171 @ 22.415  -6.949   1.045
+Mean B value for waters = 28.86 (from 2 valid waters)
+      2 waters,      2 non-waters
+      0 close contacts noted
+      0 waters are too far from all neighbors
+
+Final water statistics:
+  Total water molecules: 2
+  Unmarked waters: 0
+  'A' conformers: 1
+  'B' conformers: 1
+  Other conformers: 0
+  Total water positions: 1

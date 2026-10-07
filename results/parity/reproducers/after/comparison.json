@@ -1,0 +1,57 @@
+{
+  "options": "default (no flags)",
+  "cases": {
+    "1CTF-pair": {
+      "input_sha256": "87d82546b024dd512f0f93f030d54b9c0d49e006654756e116612e28304ae783",
+      "c_waters": 2,
+      "python_waters": 2,
+      "byte_equal": false,
+      "parsed_equal_in_order": true,
+      "same_serial_order": true,
+      "only_c_serials": [],
+      "only_python_serials": [],
+      "different_waters": 0,
+      "field_mismatches": {},
+      "differences": []
+    },
+    "1IR0-pair": {
+      "input_sha256": "9f2dbff64dbcf4d176696355ff4af8e4f6dfee37d081ea6ad5991700ff583531",
+      "c_waters": 2,
+      "python_waters": 2,
+      "byte_equal": false,
+      "parsed_equal_in_order": true,
+      "same_serial_order": true,
+      "only_c_serials": [],
+      "only_python_serials": [],
+      "different_waters": 0,
+      "field_mismatches": {},
+      "differences": []
+    },
+    "1UBQ-pair": {
+      "input_sha256": "d474f32ea1a7aee9d1ce4afdf8efbdd3b68bf0568cefcefa90e6dade43ec1c69",
+      "c_waters": 2,
+      "python_waters": 2,
+      "byte_equal": false,
+      "parsed_equal_in_order": true,
+      "same_serial_order": true,
+      "only_c_serials": [],
+      "only_python_serials": [],
+      "different_waters": 0,
+      "field_mismatches": {},
+      "differences": []
+    },
+    "2CI2-pair": {
+      "input_sha256": "cb48713758cdb80b082e0dea4839e83e8be921ffa24d895e1e35087906ea9ff6",
+      "c_waters": 2,
+      "python_waters": 2,
+      "byte_equal": false,
+      "parsed_equal_in_order": true,
+      "same_serial_order": true,
+      "only_c_serials": [],
+      "only_python_serials": [],
+      "different_waters": 0,
+      "field_mismatches": {},
+      "differences": []
+    }
+  }
+}

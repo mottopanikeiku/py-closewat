@@ -1,0 +1,34 @@
+{
+  "definition": "All parsed fields of a water agree after alignment by original serial; order scored separately.",
+  "options": "default (no flags)",
+  "before": {
+    "structures": 4,
+    "ordered_parsed_equal": 0,
+    "byte_equal": 0,
+    "c_waters": 313,
+    "matched_waters_by_serial": 0,
+    "water_parity_percent": 0.0,
+    "only_python_serials": 0,
+    "only_c_serials": 0,
+    "field_mismatches": {
+      "resnum": 313,
+      "occupancy": 12,
+      "bfactor": 16
+    }
+  },
+  "after": {
+    "structures": 4,
+    "ordered_parsed_equal": 3,
+    "byte_equal": 0,
+    "c_waters": 313,
+    "matched_waters_by_serial": 305,
+    "water_parity_percent": 97.44408945686901,
+    "only_python_serials": 0,
+    "only_c_serials": 0,
+    "field_mismatches": {
+      "resnum": 8,
+      "occupancy": 0,
+      "bfactor": 0
+    }
+  }
+}

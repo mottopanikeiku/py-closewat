@@ -1,9 +1,12 @@
 # Changelog
 
-## Atom-name parity fix
+## Atom-name parity fix and cleanup
 
 - The port stripped PDB atom names, so Tyr `OH` and Arg `NH1`/`NH2` were classified as hydrogens and skipped as nearest polar neighbours. It now keeps columns 13-16 raw, as `closewat.c` does. The too-far-water counts in the 1CTF and 2CI2 logs drop by one each and now match C.
 - Byte-identical water outputs rose from 0/4 to 3/4; 1IR0 differs only in its eight tied residue numbers. Parsed-field parity (305/313) is unchanged.
+- `proximity()` called `split4()` with swapped arguments, which would raise on a `D` conformer (the port does not currently assign `D`); fixed with a regression test.
+- A new C comparison test pins the known triple/quad grouping difference on synthetic 3- and 4-position waters; it is listed under README limitations.
+- Removed the stale root `closewat.log`, the redundant `run_tests.py`, unused imports, and unused test requirements; pinned CI actions to commit SHAs.
 
 ## Default-output parity fixes
 

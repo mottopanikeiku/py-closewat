@@ -1,5 +1,10 @@
 # Changelog
 
+## Atom-name parity fix
+
+- The port stripped PDB atom names, so Tyr `OH` and Arg `NH1`/`NH2` were classified as hydrogens and skipped as nearest polar neighbours. It now keeps columns 13-16 raw, as `closewat.c` does. The too-far-water counts in the 1CTF and 2CI2 logs drop by one each and now match C.
+- Byte-identical water outputs rose from 0/4 to 3/4; 1IR0 differs only in its eight tied residue numbers. Parsed-field parity (305/313) is unchanged.
+
 ## Default-output parity fixes
 
 - I isolated saved numbering and occupancy/B-factor disagreements in four small real PDB pairs before changing the port.

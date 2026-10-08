@@ -1,8 +1,6 @@
 # C/Python reference comparison
 
 ## Result and scope
-I replaced machine-specific executable paths in saved Python log headings with `pyclosewat.py`; the recorded PDB outputs and comparison values are unchanged.
-
 
 I compared complete default CLI outputs on the four bundled X-ray structures before and after fixing the port. A water matches only if every parsed PDB field agrees after alignment by original atom serial. I score output order and byte equality separately; neither can be inferred from matching counts.
 
@@ -13,7 +11,7 @@ I compared complete default CLI outputs on the four bundled X-ray structures bef
 | 1CTF | 62 | 0 | 62 | 0 / 0 / 0 |
 | 2CI2 | 64 | 0 | 64 | 0 / 0 / 0 |
 
-The [summary](../results/parity/summary.json) records 0/313 → 305/313 (97.44%) matching waters and 0/4 → 3/4 ordered parsed outputs. There are no missing or extra serials. All 12 occupancy and 16 B-factor disagreements are removed. Byte equality is still 0/4: Python left-aligns the stripped atom name where C right-aligns it. Logs and diagnostic classifications are not equivalent by this test.
+The [summary](../results/parity/summary.json) records 0/313 → 305/313 (97.44%) matching waters and 0/4 → 3/4 ordered parsed outputs. There are no missing or extra serials. All 12 occupancy and 16 B-factor disagreements are removed. Byte equality is 3/4: only 1IR0 differs, through its tied residue numbers. Logs are not byte-equivalent (headings and summary sections differ), and diagnostic-code equivalence is not established by this test.
 
 ## Isolated causes
 
@@ -33,6 +31,8 @@ The old `adjustmult()` only renumbered records and never called `adjustqb()`. It
 The eight remaining 1IR0 numbering differences form four tied pairs: 671/678 (B=6.72), 653/702 (11.29), 732/739 (14.44), and 690/733 (15.80), each with identical occupancy and no conformer. C's `occbsort()` returns +1 in both comparison directions for equal Q/B. That is not a consistent ordering relation; this run's C sort reverses each pair relative to Python. I did not invent a tie-breaker and call it portable C behavior. Non-equivalence remains explicit.
 
 Independent review found two numbering regressions, which I corrected: reinsertion now tracks each chain's own single-water range even if that chain has no multiple conformers, and `-S` preserves its start-at-one numbering base. Tests cover mixed single/multiple chain ranges with a newly marked singleton, plus complete `-S` comparisons on 1UBQ and 1CTF. Those two flag cases do not establish general option parity.
+
+The port stripped the atom-name field (columns 13-16); C keeps it raw and tests characters 0 and 1 for `H` and `C`. Stripped, Tyr `OH` and Arg `NH1`/`NH2` looked like hydrogens, so they were skipped as nearest polar neighbours: 1CTF and 2CI2 logs each listed one water as too far that C does not. Keeping the raw field fixes those counts (all four now agree with C) and the output alignment, which made 1UBQ, 1CTF, and 2CI2 byte-identical. A unit test covers the `OH`/`NH1` cases; C gives the same count on that input.
 
 ## Reproduce
 

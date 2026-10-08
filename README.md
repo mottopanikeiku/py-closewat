@@ -17,7 +17,7 @@ Does the Python port reproduce the original C program's water assignments and oc
 | 1CTF | 62 | 0 → 62 | 0 |
 | 2CI2 | 64 | 0 → 64 | 0 |
 
-I count a match only when **every parsed field** agrees after alignment by original atom serial; output order is scored separately. The [before/after summary](results/parity/summary.json) and [full comparisons](results/parity/) contain the counts, outputs, and logs. Byte equality remains 0/4 because atom-name spacing differs.
+I count a match only when **every parsed field** agrees after alignment by original atom serial; output order is scored separately. The [before/after summary](results/parity/summary.json) and [full comparisons](results/parity/) contain the counts, outputs, and logs. 1UBQ, 1CTF, and 2CI2 outputs are byte-identical to C; 1IR0 differs only in the eight tied residue numbers and their order.
 
 I extracted [four small real-data reproducers](tests/data/reproducers/), fixed chain numbering and conformer-group sorting, and ported C's original-occupancy/B-factor weighting. All four pairs now agree on parsed output. [Reference notes](docs/REFERENCE.md) explain the causes and the unresolved ties, rather than treating them as floating-point noise.
 

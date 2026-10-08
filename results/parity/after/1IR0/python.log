@@ -92,10 +92,10 @@ Mean B value for waters = 12.06 (from 129 valid waters)
  Water molecules within    2.50 A of neighbors (or    1.50 A of H's)
     Coordinates of Water Distance Renumbered   Original   Nearest Neighbor Atom
        x       y       z               Water      Water  AtomID Renumbered   Original Diagnosis
-  39.959  18.812   8.208    2.500  HOH A 152  HOH A 171    OD1   ASP A  23  ASP A  23    bump
-  34.592  15.451  21.569    2.396  HOH A 188  HOH A 110    OE2   GLU A  59  GLU A  59    edit
-  15.450  17.029  17.429    2.296  HOH A 189  HOH A 160    OE1   GLU A  81  GLU A  81    edit
-  21.216  22.329   1.257    2.355  HOH A 227  HOH A 228    O4    SO4 A  84  SO4 A  84    edit
+  39.959  18.812   8.208    2.500  HOH A 152  HOH A 171     OD1  ASP A  23  ASP A  23    bump
+  34.592  15.451  21.569    2.396  HOH A 188  HOH A 110     OE2  GLU A  59  GLU A  59    edit
+  15.450  17.029  17.429    2.296  HOH A 189  HOH A 160     OE1  GLU A  81  GLU A  81    edit
+  21.216  22.329   1.257    2.355  HOH A 227  HOH A 228     O4   SO4 A  84  SO4 A  84    edit
       4 close contacts noted:   1    bump,   3    edit
       0 waters are too far from all neighbors
 

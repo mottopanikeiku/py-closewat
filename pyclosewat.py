@@ -26,7 +26,7 @@ class PDBRecord:
     """Equivalent to the PDBRECORD struct in C"""
     def __init__(self):
         self.p_rtype = ""        # Record type (e.g., "ATOM  ", "HETATM")
-        self.p_attype = ""       # Atom type (e.g., " CA ", " O  ")
+        self.p_attype = ""       # Atom name, raw columns 13-16 (e.g., " CA ", " O  ")
         self.p_resname = ""      # Residue name (e.g., "ALA", "HOH")
         self.p_atomid = ""       # Atom ID
         self.p_conf = ' '        # Conformer ID (e.g., 'A', 'B', etc.)
@@ -247,8 +247,9 @@ def strtorec(line: str, ptp: PDBRecord) -> None:
         # Extract atom number (columns 7-11)
         ptp.p_atnum = int(line[6:11].strip())
         
-        # Extract atom type (columns 13-16)
-        ptp.p_attype = line[12:16].strip()
+        # Extract atom name (columns 13-16) unstripped, as C does: alignment
+        # distinguishes " OH " (oxygen) from "HG21" (hydrogen) and is written back.
+        ptp.p_attype = line[12:16]
         
         # Extract conformer ID (column 17)
         ptp.p_confo = ptp.p_conf = line[16] if len(line) > 16 else ' '

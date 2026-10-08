@@ -154,7 +154,7 @@ class TestPDBParsing:
         
         assert rec.p_rtype == "ATOM"
         assert rec.p_atnum == 1
-        assert rec.p_attype == "N"
+        assert rec.p_attype == " N  "  # raw columns 13-16, as in closewat.c
         assert rec.p_resname == "ALA"
         assert rec.p_chainid == 'A'
         assert rec.p_resnum == 1
@@ -518,29 +518,15 @@ class TestOutputFunctions:
     """Test output formatting functions"""
     
     def test_outrec(self):
-        """Test PDB record output"""
+        """A water record round-trips byte-for-byte, keeping atom-name alignment"""
+        line = "HETATM  100  O   HOH A 200      10.123  20.456  30.789  1.00 20.00           O  \n"
         rec = pc.PDBRecord()
-        rec.p_rtype = "HETATM"
-        rec.p_atnum = 100
-        rec.p_attype = "O"
-        rec.p_conf = ' '
-        rec.p_resname = "HOH"
-        rec.p_chainid = 'A'
-        rec.p_resnum = 200
-        rec.p_xc = 10.123
-        rec.p_yc = 20.456
-        rec.p_zc = 30.789
-        rec.p_occ = 1.00
-        rec.p_bval = 20.00
-        rec.p_atomid = "O"
-        
+        pc.strtorec(line, rec)
+
         output = StringIO()
         pc.outrec(rec, output)
-        
-        result = output.getvalue()
-        assert "HETATM" in result
-        assert "HOH" in result
-        assert "10.123" in result
+
+        assert output.getvalue() == line
     
     def test_printclose(self):
         """Test close contact printing"""
@@ -558,7 +544,7 @@ class TestOutputFunctions:
         water.p_diag = 6
         
         atom = pc.PDBRecord()
-        atom.p_attype = "N"
+        atom.p_attype = " N  "
         atom.p_conf = ' '
         atom.p_resname = "ALA"
         atom.p_chainid = 'A'
@@ -575,6 +561,41 @@ class TestOutputFunctions:
         assert "10.000" in result
         assert "20.000" in result
         assert "bump" in result.lower()
+
+
+class TestNearestPolarNeighbor:
+    """closewat.c classifies atoms by raw columns 13-14, so " OH " is oxygen."""
+
+    # Water 1 is 3.0 A from the test atom; water 2 is 5.0 A from water 1.
+    WATERS = (
+        "HETATM  900  O   HOH A 301      13.000  10.000  10.000  1.00 20.00           O  ",
+        "HETATM  901  O   HOH A 302      18.000  10.000  10.000  1.00 20.00           O  ",
+    )
+
+    @staticmethod
+    def far_waters(atom_line):
+        top = pc.TotalSt()
+        for target, line in [(top.tpat, atom_line)] + [(top.tpwa, w) for w in TestNearestPolarNeighbor.WATERS]:
+            rec = pc.PDBRecord()
+            pc.strtorec(line, rec)
+            target.append(rec)
+        top.tpatp, top.tpwap = len(top.tpat), len(top.tpwa)
+        pc.proximity(top)
+        return top.tnclose
+
+    @pytest.mark.parametrize("atom_line", [
+        "ATOM      1  NH1 ARG A  10      10.000  10.000  10.000  1.00 10.00           N  ",
+        "ATOM      1  OH  TYR A  10      10.000  10.000  10.000  1.00 10.00           O  ",
+    ])
+    def test_polar_atoms_with_h_in_second_column_count(self, atom_line):
+        assert self.far_waters(atom_line) == 1
+
+    @pytest.mark.parametrize("atom_line", [
+        "ATOM      1 HH11 ARG A  10      10.000  10.000  10.000  1.00 10.00           H  ",
+        "ATOM      1  CZ  ARG A  10      10.000  10.000  10.000  1.00 10.00           C  ",
+    ])
+    def test_hydrogen_and_carbon_are_not_polar_neighbors(self, atom_line):
+        assert self.far_waters(atom_line) == 2
 
 
 # Run tests if this file is executed directly

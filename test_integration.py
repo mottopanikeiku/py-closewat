@@ -8,7 +8,6 @@ These tests verify end-to-end functionality with realistic PDB inputs.
 import pytest
 import tempfile
 import os
-from pathlib import Path
 
 import pyclosewat as pc
 import test_fixtures as fixtures

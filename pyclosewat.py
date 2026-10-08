@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 import sys
 import math
-import os
 import argparse
-from typing import List, Dict, Tuple, Optional, Callable, Any, Union, Set
-from contextlib import contextmanager
+from typing import Tuple
 from functools import cmp_to_key
 
 # Constants from the original C code
@@ -26,7 +24,7 @@ class PDBRecord:
     """Equivalent to the PDBRECORD struct in C"""
     def __init__(self):
         self.p_rtype = ""        # Record type (e.g., "ATOM  ", "HETATM")
-        self.p_attype = ""       # Atom type (e.g., " CA ", " O  ")
+        self.p_attype = ""       # Atom name, raw columns 13-16 (e.g., " CA ", " O  ")
         self.p_resname = ""      # Residue name (e.g., "ALA", "HOH")
         self.p_atomid = ""       # Atom ID
         self.p_conf = ' '        # Conformer ID (e.g., 'A', 'B', etc.)
@@ -247,8 +245,9 @@ def strtorec(line: str, ptp: PDBRecord) -> None:
         # Extract atom number (columns 7-11)
         ptp.p_atnum = int(line[6:11].strip())
         
-        # Extract atom type (columns 13-16)
-        ptp.p_attype = line[12:16].strip()
+        # Extract atom name (columns 13-16) unstripped, as C does: alignment
+        # distinguishes " OH " (oxygen) from "HG21" (hydrogen) and is written back.
+        ptp.p_attype = line[12:16]
         
         # Extract conformer ID (column 17)
         ptp.p_confo = ptp.p_conf = line[16] if len(line) > 16 else ' '
@@ -385,7 +384,7 @@ def ready(top: TotalSt) -> int:
                         return 1 # Indicate error
                 else:
                     if top.tfpl and hasattr(top.tfpl, 'write'):
-                        top.tfpl.write(f"Error: Input stream is not sys.stdin, seek failed, and no valid name to reopen in ready().\n")
+                        top.tfpl.write("Error: Input stream is not sys.stdin, seek failed, and no valid name to reopen in ready().\n")
                     return 1 # Indicate error
         else:
             # If we can't seek (e.g. not supported, or missing attribute), we need to try to reopen the file by name
@@ -409,7 +408,7 @@ def ready(top: TotalSt) -> int:
             else:
                 # Cannot reopen if it's not a named file (e.g. some other stream)
                 if top.tfpl and hasattr(top.tfpl, 'write'):
-                    top.tfpl.write(f"Error: Input stream is not sys.stdin, not seekable, and has no valid name to reopen in ready().\n")
+                    top.tfpl.write("Error: Input stream is not sys.stdin, not seekable, and has no valid name to reopen in ready().\n")
                 return 1 # Indicate error
     
     return 0
@@ -1185,7 +1184,7 @@ def proximity(top: TotalSt) -> None:
     for i in range(top.tpwap):
         pwap = top.tpwa[i]
         if pwap.p_conf == 'D':
-            split4(pwap, top)
+            split4(top, pwap)
     
     # For each water, check close contacts with non-waters and other waters
     top.tnclose = 0
@@ -1307,7 +1306,7 @@ def finalmult(top: TotalSt) -> None:
     water_positions = unmarked_count + a_conf_count  # Each A conformer represents one position
     
     if top.tfpl is not None:
-        top.tfpl.write(f"\nFinal water statistics:\n")
+        top.tfpl.write("\nFinal water statistics:\n")
         top.tfpl.write(f"  Total water molecules: {total_waters}\n")
         top.tfpl.write(f"  Unmarked waters: {unmarked_count}\n")
         top.tfpl.write(f"  'A' conformers: {a_conf_count}\n")

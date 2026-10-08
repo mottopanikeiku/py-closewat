@@ -19,7 +19,7 @@
   "after": {
     "structures": 4,
     "ordered_parsed_equal": 3,
-    "byte_equal": 0,
+    "byte_equal": 3,
     "c_waters": 313,
     "matched_waters_by_serial": 305,
     "water_parity_percent": 97.44408945686901,

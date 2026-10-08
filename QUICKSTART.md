@@ -2,14 +2,14 @@
 
 This Python port builds on the included [`closewat.c`](closewat.c). Its outputs differ from C; read the [measured comparison](README.md#result) before using adjusted occupancies or B-factors.
 
-The CLI needs Python's standard library only. Run from a temporary directory so the new `closewat.log` does not overwrite the example log in the repository:
+The CLI needs Python's standard library only. It writes `closewat.log` to the current directory, so run it from a scratch directory:
 
 ```bash
 mkdir -p /tmp/closewat-example
 (cd /tmp/closewat-example && nice -n 19 python /path/to/py-closewat/pyclosewat.py /path/to/py-closewat/1IR0.pdb waters.pdb)
 ```
 
-Replace `/path/to/py-closewat` with your checkout path. `waters.pdb` contains only the output water records, not the whole input structure. `closewat.log` contains contact diagnostics and summary counts. The residue numbers, occupancies and B-factors can change; these are algorithm outputs, not new experimental measurements.
+Replace `/path/to/py-closewat` with your checkout path. `waters.pdb` contains only the output water records, not the whole input structure. `closewat.log` contains contact diagnostics and summary counts; [results/parity/after/1IR0/python.log](results/parity/after/1IR0/python.log) is the saved log for this command. The residue numbers, occupancies and B-factors can change; these are algorithm outputs, not new experimental measurements.
 
 To view the available flags:
 

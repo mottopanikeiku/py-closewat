@@ -17,7 +17,7 @@ Does the Python port reproduce the original C program's water assignments and oc
 | 1CTF | 62 | 0 → 62 | 0 |
 | 2CI2 | 64 | 0 → 64 | 0 |
 
-I count a match only when **every parsed field** agrees after alignment by original atom serial; output order is scored separately. The [before/after summary](results/parity/summary.json) and [full comparisons](results/parity/) contain the counts, outputs, and logs. Byte equality remains 0/4 because atom-name spacing differs.
+I count a match only when **every parsed field** agrees after alignment by original atom serial; output order is scored separately. The [before/after summary](results/parity/summary.json) and [full comparisons](results/parity/) contain the counts, outputs, and logs. 1UBQ, 1CTF, and 2CI2 outputs are byte-identical to C; 1IR0 differs only in the eight tied residue numbers and their order.
 
 I extracted [four small real-data reproducers](tests/data/reproducers/), fixed chain numbering and conformer-group sorting, and ported C's original-occupancy/B-factor weighting. All four pairs now agree on parsed output. [Reference notes](docs/REFERENCE.md) explain the causes and the unresolved ties, rather than treating them as floating-point noise.
 
@@ -39,6 +39,7 @@ Local CPU only; no GPU or paid service. Test inputs are bundled, so tests need n
 
 - Default options on these small X-ray structures are the reference scope; other structures and option combinations are not validated against C.
 - Equal-key sorting in C does not define a consistent tie order; eight residue-number disagreements remain. Do not substitute Python for C without checking the output.
+- Triple and quadruple conformer grouping (`thisthird`, `reorg4`, `split4` in C) is not ported. On a synthetic water with three or four positions within 0.85 Å, C emits one A–C or A–D group; Python emits one A/B pair plus single waters with different occupancies. `test_reference.py` pins this difference. The four bundled structures contain only pairs.
 - Logs and diagnostic classifications are recorded, but diagnostic-code equivalence is not established.
 - The C program is a comparison baseline, not experimental ground truth for water placement or hydrogen bonding.
 - Original C authorship and redistribution terms need confirmation; there is no license file in this repository.

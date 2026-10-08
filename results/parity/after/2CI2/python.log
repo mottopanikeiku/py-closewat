@@ -25,23 +25,22 @@ Mean B value for waters = 32.19 (from 64 valid waters)
  Water molecules within    2.50 A of neighbors (or    1.50 A of H's)
     Coordinates of Water Distance Renumbered   Original   Nearest Neighbor Atom
        x       y       z               Water      Water  AtomID Renumbered   Original Diagnosis
-  -8.502 -16.494  17.981    2.495  HOH I 101  HOH I  95    OD2   ASP I  71  ASP I  71    bump
-  11.224 -29.647   8.973    2.406  HOH I 144  HOH I 135    O     LYS I  21  LYS I  21    edit
-  11.913 -34.478  18.581    2.391  HOH I 146  HOH I 139    O     GLN I  41  GLN I  41    edit
-  19.516 -21.255  13.031    2.374 BHOH I 169  HOH I 112    OD2   ASP I  64  ASP I  64    edit
+  -8.502 -16.494  17.981    2.495  HOH I 101  HOH I  95     OD2  ASP I  71  ASP I  71    bump
+  11.224 -29.647   8.973    2.406  HOH I 144  HOH I 135     O    LYS I  21  LYS I  21    edit
+  11.913 -34.478  18.581    2.391  HOH I 146  HOH I 139     O    GLN I  41  GLN I  41    edit
+  19.516 -21.255  13.031    2.374 BHOH I 169  HOH I 112     OD2  ASP I  64  ASP I  64    edit
       4 close contacts noted:   1    bump,   3    edit
 Waters that are more than     3.90 A from the nearest heteroatom neighbor:
-  -3.023  -2.235  18.293    4.891  HOH I 116  HOH I 127    O     HOH I 143  HOH I 129
-   4.530 -28.781  -0.047    4.298  HOH I 118  HOH I 138    OE1   GLU I  23  GLU I  23
-  21.030 -19.090  21.742    4.834  HOH I 121  HOH I 130    O     HOH I 150  HOH I 113
-   5.641 -38.800  22.958    4.419  HOH I 125  HOH I 116    NE2   GLN I  41  GLN I  41
-  20.537 -17.890   5.103    4.119  HOH I 127  HOH I  85    NE    ARG I  62  ARG I  62
-  13.517 -29.044  26.642    6.194  HOH I 133  HOH I 121    O     HOH I 108  HOH I 120
-   1.881 -32.214  22.846    4.457  HOH I 136  HOH I 131    O     HOH I 122  HOH I 141
-  13.266 -20.427  23.057    5.013  HOH I 147  HOH I 118    O     HOH I 104  HOH I  96
-   1.459 -39.256   4.127    6.431  HOH I 149  HOH I 137    O     HOH I 155  HOH I 136
-   2.873 -36.659  17.649    4.118  HOH I 153  HOH I  94    O     HOH I 148  HOH I 114
-     10 waters are too far from all neighbors
+  -3.023  -2.235  18.293    4.891  HOH I 116  HOH I 127     O    HOH I 143  HOH I 129
+   4.530 -28.781  -0.047    4.298  HOH I 118  HOH I 138     OE1  GLU I  23  GLU I  23
+  21.030 -19.090  21.742    4.834  HOH I 121  HOH I 130     O    HOH I 150  HOH I 113
+   5.641 -38.800  22.958    4.419  HOH I 125  HOH I 116     NE2  GLN I  41  GLN I  41
+  13.517 -29.044  26.642    6.194  HOH I 133  HOH I 121     O    HOH I 108  HOH I 120
+   1.881 -32.214  22.846    4.457  HOH I 136  HOH I 131     O    HOH I 122  HOH I 141
+  13.266 -20.427  23.057    5.013  HOH I 147  HOH I 118     O    HOH I 104  HOH I  96
+   1.459 -39.256   4.127    6.431  HOH I 149  HOH I 137     O    HOH I 155  HOH I 136
+   2.873 -36.659  17.649    4.118  HOH I 153  HOH I  94     O    HOH I 148  HOH I 114
+      9 waters are too far from all neighbors
 
 Final water statistics:
   Total water molecules: 64

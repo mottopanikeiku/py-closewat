@@ -7,12 +7,9 @@ for the pyclosewat water analysis tool.
 """
 
 import pytest
-import sys
 import os
-import math
 import tempfile
 from io import StringIO
-from pathlib import Path
 
 # Import the module to test
 import pyclosewat as pc

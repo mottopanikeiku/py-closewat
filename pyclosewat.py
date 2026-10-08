@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 import sys
 import math
-import os
 import argparse
-from typing import List, Dict, Tuple, Optional, Callable, Any, Union, Set
-from contextlib import contextmanager
+from typing import Tuple
 from functools import cmp_to_key
 
 # Constants from the original C code
@@ -386,7 +384,7 @@ def ready(top: TotalSt) -> int:
                         return 1 # Indicate error
                 else:
                     if top.tfpl and hasattr(top.tfpl, 'write'):
-                        top.tfpl.write(f"Error: Input stream is not sys.stdin, seek failed, and no valid name to reopen in ready().\n")
+                        top.tfpl.write("Error: Input stream is not sys.stdin, seek failed, and no valid name to reopen in ready().\n")
                     return 1 # Indicate error
         else:
             # If we can't seek (e.g. not supported, or missing attribute), we need to try to reopen the file by name
@@ -410,7 +408,7 @@ def ready(top: TotalSt) -> int:
             else:
                 # Cannot reopen if it's not a named file (e.g. some other stream)
                 if top.tfpl and hasattr(top.tfpl, 'write'):
-                    top.tfpl.write(f"Error: Input stream is not sys.stdin, not seekable, and has no valid name to reopen in ready().\n")
+                    top.tfpl.write("Error: Input stream is not sys.stdin, not seekable, and has no valid name to reopen in ready().\n")
                 return 1 # Indicate error
     
     return 0
@@ -1308,7 +1306,7 @@ def finalmult(top: TotalSt) -> None:
     water_positions = unmarked_count + a_conf_count  # Each A conformer represents one position
     
     if top.tfpl is not None:
-        top.tfpl.write(f"\nFinal water statistics:\n")
+        top.tfpl.write("\nFinal water statistics:\n")
         top.tfpl.write(f"  Total water molecules: {total_waters}\n")
         top.tfpl.write(f"  Unmarked waters: {unmarked_count}\n")
         top.tfpl.write(f"  'A' conformers: {a_conf_count}\n")

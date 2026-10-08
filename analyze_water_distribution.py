@@ -1,7 +1,5 @@
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-from pathlib import Path
 
 # Load the CSV data
 df = pd.read_csv('pdb_water_analysis.csv')

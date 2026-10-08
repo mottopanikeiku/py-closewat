@@ -101,7 +101,7 @@ def main():
         avg_water = sum(water_counts) / len(water_counts)
         min_water = min(water_counts)
         max_water = max(water_counts)
-        print(f"\nStatistics for water molecules in processed structures:")
+        print("\nStatistics for water molecules in processed structures:")
         print(f"Average water molecules per structure: {avg_water:.2f}")
         print(f"Minimum water molecules: {min_water}")
         print(f"Maximum water molecules: {max_water}")

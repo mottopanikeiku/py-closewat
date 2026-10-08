@@ -52,4 +52,4 @@ The summary command reads the committed before/after comparisons. `test_referenc
 
 The C file has no author/license notice. Its earliest recorded repository commit is `095ded4` (2025-04-25, “All files done”), without upstream attribution. I assign no license or author to it. Identifying its original source and confirming redistribution terms remains open for the owner.
 
-The existing 844-row metadata/water-count CSV is unchanged and is not the parity dataset. Batch fetching and plotting were not rerun. The next useful compatibility work is an explicit tie policy, then separate tests for nondefault flags and higher-order grouping; I make no claim that those already match.
+The existing 844-row metadata/water-count CSV is unchanged and is not the parity dataset. Batch fetching and plotting were not rerun. The next useful compatibility work is an explicit tie policy, a port of C's triple/quad grouping (synthetic 3- and 4-position waters already disagree; `test_reference.py` pins the difference), and tests for nondefault flags; I make no claim that flags beyond the two `-S` cases match.

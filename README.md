@@ -39,6 +39,7 @@ Local CPU only; no GPU or paid service. Test inputs are bundled, so tests need n
 
 - Default options on these small X-ray structures are the reference scope; other structures and option combinations are not validated against C.
 - Equal-key sorting in C does not define a consistent tie order; eight residue-number disagreements remain. Do not substitute Python for C without checking the output.
+- Triple and quadruple conformer grouping (`thisthird`, `reorg4`, `split4` in C) is not ported. On a synthetic water with three or four positions within 0.85 Å, C emits one A–C or A–D group; Python emits one A/B pair plus single waters with different occupancies. `test_reference.py` pins this difference. The four bundled structures contain only pairs.
 - Logs and diagnostic classifications are recorded, but diagnostic-code equivalence is not established.
 - The C program is a comparison baseline, not experimental ground truth for water placement or hydrogen bonding.
 - Original C authorship and redistribution terms need confirmation; there is no license file in this repository.

@@ -1186,7 +1186,7 @@ def proximity(top: TotalSt) -> None:
     for i in range(top.tpwap):
         pwap = top.tpwa[i]
         if pwap.p_conf == 'D':
-            split4(pwap, top)
+            split4(top, pwap)
     
     # For each water, check close contacts with non-waters and other waters
     top.tnclose = 0

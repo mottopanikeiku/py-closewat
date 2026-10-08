@@ -513,6 +513,16 @@ class TestConformerHandling:
         result = pc.confchange(rec, top)
         assert result == 'B'
 
+    def test_proximity_accepts_d_conformer(self):
+        """proximity() passes (top, water) to split4 in its declared order"""
+        top = pc.TotalSt()
+        water = pc.PDBRecord()
+        pc.strtorec("HETATM  900  O  DHOH A 301      13.000  10.000  10.000  0.25 20.00           O  ",
+                    water)
+        top.tpwa, top.tpwap = [water], 1
+        pc.proximity(top)
+        assert top.tnclose == 0
+
 
 class TestOutputFunctions:
     """Test output formatting functions"""
